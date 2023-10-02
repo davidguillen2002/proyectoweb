@@ -7,7 +7,7 @@
 
 <p>¿Estás seguro de que deseas eliminar al usuario "{{ usuario.username }}"?</p>
 
-<form method="post">
+<form method="POST">
     {% csrf_token %}
     <input type="hidden" name="user_id" value="{{ usuario.id }}">
     <input type="hidden" name="confirmar_eliminar" value="1"> <!-- Agrega este campo oculto -->

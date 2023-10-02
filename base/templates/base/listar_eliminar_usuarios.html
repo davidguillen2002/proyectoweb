@@ -1,34 +1,50 @@
 {% extends 'base/principal.html' %}
 {% block content %}
 
+<style>
+    /* Estilo CSS para el contenedor de botones */
+    .botones-eliminar {
+        display: flex;
+        justify-content: flex-end; /* Alinea los botones a la derecha */
+        align-items: center; /* Alinea verticalmente los botones */
+    }
+
+    /* Estilo CSS para ajustar el espaciado entre los elementos */
+    .titulo-tarea i {
+        margin-right: 20px; /* Ajusta el margen entre el nombre y el botón */
+    }
+</style>
+
 <div class="barra-superior">
-    <h1>Lista de Usuarios del Sistema</h1>
+    <div>
+        <h1>Lista de Usuarios del Sistema</h1>
+    </div>
+    <div>
+        <a href="{% url 'tareas' %}">Volver</a>
+    </div>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Nombre de usuario</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for usuario in usuarios_normales %}
-        <tr>
-            <td>{{ usuario.username }}</td>
-            <td>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                    <button type="submit" name="confirmar_eliminar" value="1" onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ usuario.username }}?')">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<a href="{% url 'tareas' %}">Volver a la lista de tareas</a>
+<div class="envoltorio-items-tarea">
+    {% for usuario in usuarios_normales %}
+    <div class="envoltorio-tarea">
+        <div class="titulo-tarea">
+            <div class="icono-tarea-completa"></div>
+            <i>{{ usuario.username }}</i>
+        </div>
+        <form method="POST" class="botones-eliminar">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ usuario.id }}">
+            <button type="submit" name="confirmar_eliminar" value="1" onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ usuario.username }}?')">ELIMINAR</button>
+        </form>
+    </div>
+    {% empty %}
+    <h3>No hay usuarios normales en el sistema</h3>
+    {% endfor %}
+</div>
 
 {% endblock content %}
+
+
+
+
 
