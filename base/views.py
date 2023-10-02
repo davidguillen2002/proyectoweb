@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -18,9 +18,15 @@ def listar_eliminar_usuarios(request):
 
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
-        usuario_a_eliminar = User.objects.get(pk=user_id)
-        usuario_a_eliminar.delete()
-        return redirect('lista_usuarios')  # Redirige a la lista de usuarios después de eliminar.
+        usuario_a_eliminar = get_object_or_404(User, pk=user_id)
+
+        # Si el formulario de confirmación de eliminación se envía, elimina al usuario.
+        if 'confirmar_eliminar' in request.POST:
+            usuario_a_eliminar.delete()
+            return redirect('lista_usuarios')  # Redirige a la lista de usuarios después de eliminar.
+        else:
+            # Si el usuario cancela la eliminación, vuelve a la lista de usuarios.
+            return redirect('lista_usuarios')
 
     return render(request, 'base/listar_eliminar_usuarios.html', {'usuarios_normales': usuarios_normales})
 

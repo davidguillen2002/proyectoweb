@@ -1,13 +1,15 @@
 {% extends 'base/principal.html' %}
 {% block content %}
 
-<h1>Lista de Usuarios Normales</h1>
+<div class="barra-superior">
+    <h1>Lista de Usuarios del Sistema</h1>
+</div>
 
 <table>
     <thead>
         <tr>
             <th>Nombre de usuario</th>
-            <th>Eliminar</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -15,10 +17,10 @@
         <tr>
             <td>{{ usuario.username }}</td>
             <td>
-                <form method="post">
+                <form method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                    <button type="submit">Eliminar</button>
+                    <button type="submit" name="confirmar_eliminar" value="1" onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ usuario.username }}?')">Eliminar</button>
                 </form>
             </td>
         </tr>
@@ -29,3 +31,4 @@
 <a href="{% url 'tareas' %}">Volver a la lista de tareas</a>
 
 {% endblock content %}
+

@@ -1,0 +1,20 @@
+{% extends 'base/principal.html' %}
+{% block content %}
+
+<div class="barra-superior">
+    <h1>Confirmar Eliminación de Usuario</h1>
+</div>
+
+<p>¿Estás seguro de que deseas eliminar al usuario "{{ usuario.username }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="user_id" value="{{ usuario.id }}">
+    <input type="hidden" name="confirmar_eliminar" value="1"> <!-- Agrega este campo oculto -->
+    <button type="submit">Confirmar Eliminación</button>
+</form>
+
+
+<a href="{% url 'lista_usuarios' %}">Cancelar</a>
+
+{% endblock content %}
