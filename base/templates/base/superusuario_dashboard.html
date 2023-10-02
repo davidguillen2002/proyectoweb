@@ -1,0 +1,22 @@
+{% extends 'base/principal.html' %}
+{% block content %}
+
+<div class="barra-superior">
+    <h1>Panel de Superusuario</h1>
+    <a href="{% url 'logout' %}">Salir</a>
+</div>
+
+<div class="contenido">
+    <h2>Resumen del Dashboard</h2>
+    <p>Total de Tareas Pendientes: {{ count }}</p>
+    <h3>Listado de Usuarios Normales:</h3>
+    <ul>
+        {% for usuario in usuarios %}
+            <li>{{ usuario.username }} - Tareas Pendientes: {{ tareas_por_usuario|get_item:usuario }} </li>
+        {% empty %}
+            <li>No hay usuarios normales</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends 'base/principal.html' %}
+{% block content %}
+
+<h1>Lista de Usuarios Normales</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre de usuario</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios_normales %}
+        <tr>
+            <td>{{ usuario.username }}</td>
+            <td>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                    <button type="submit">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'tareas' %}">Volver a la lista de tareas</a>
+
+{% endblock content %}

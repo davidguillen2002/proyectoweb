@@ -15,3 +15,6 @@ class Tarea(models.Model):
     class Meta:
         ordering = ['completo']
 
+
+
+

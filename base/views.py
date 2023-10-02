@@ -6,8 +6,23 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from .models import Tarea
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def listar_eliminar_usuarios(request):
+    usuarios_normales = User.objects.filter(is_superuser=False)
+
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        usuario_a_eliminar = User.objects.get(pk=user_id)
+        usuario_a_eliminar.delete()
+        return redirect('lista_usuarios')  # Redirige a la lista de usuarios después de eliminar.
+
+    return render(request, 'base/listar_eliminar_usuarios.html', {'usuarios_normales': usuarios_normales})
 
 
 class Logueo(LoginView):
@@ -79,6 +94,8 @@ class EliminarTarea(LoginRequiredMixin, DeleteView):
     model = Tarea
     context_object_name = 'tareas'
     success_url = reverse_lazy('tareas')
+
+
 
 
 
