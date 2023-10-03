@@ -21,7 +21,7 @@ A continuación, se presenta un diagrama de arquitectura simplificado que repres
 
 ## Explicación del Diagrama
 
-Nuestra aplicación web está construida utilizando el framework Django, que sigue el patrón de diseño Modelo-Vista-Plantilla (MVT).
+La aplicación web está construida utilizando el framework Django, que sigue el patrón de diseño Modelo-Vista-Plantilla (MVT).
 
 - **Frontend (Cliente):** En el lado del cliente, utilizamos las Plantillas de Django (Templates) para definir la presentación de nuestras páginas web. Estas plantillas se encargan de cómo se mostrarán los datos al usuario y cómo interactuará con la aplicación.
 
@@ -33,6 +33,6 @@ Nuestra aplicación web está construida utilizando el framework Django, que sig
     
 Este diseño nos permite separar claramente las responsabilidades entre la presentación (Frontend) y la lógica de la aplicación (Backend), lo que facilita el desarrollo, la escalabilidad y el mantenimiento de nuestra aplicación web.
 
-En resumen, nuestra aplicación web hasta el momento permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) a través de una interfaz amigable y segura, gracias a la estructura proporcionada por Django.
+En síntesis, la aplicación web hasta el momento permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) a través de una interfaz amigable y segura, gracias a la estructura proporcionada por Django.
 
 
