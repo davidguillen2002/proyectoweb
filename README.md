@@ -16,7 +16,10 @@ Django facilita la separación de preocupaciones al organizar el código de la a
 
 A continuación, se presenta un diagrama de arquitectura simplificado que representa la estructura de la aplicación web construida con Django:
 
-![Diagrama de Arquitectura](https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20de%20Arquitectura%20(Django).png)
+<p align="center">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20de%20Arquitectura%20(Django).png" alt="Diagrama de Arquitectura">
+</p>
+
 
 
 ## Explicación del Diagrama
