@@ -38,4 +38,32 @@ Este diseño nos permite separar claramente las responsabilidades entre la prese
 
 En síntesis, la aplicación web hasta el momento permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) a través de una interfaz amigable y segura, gracias a la estructura proporcionada por Django.
 
+# Explicación general del Login:
+El sistema de login desarrollado permite a los usuarios registrarse e iniciar sesión de forma segura. Cada usuario solo puede ver y gestionar sus propias tareas, y existe un superusuario con privilegios especiales para administrar usuarios normales.
+
+## Sección Diseño de Ingeniería:
+
+### Diagrama Login:
+
+![Diagrama Login](URL_DE_LA_IMAGEN)
+
+### Explicación del diagrama actualizado:
+
+1. **Página de Login**: Los usuarios llegan a la página de inicio de sesión donde pueden elegir entre registrarse como nuevo usuario o iniciar sesión con sus credenciales existentes.
+
+2. **Registro de Usuario**: Los usuarios nuevos pueden crear una cuenta proporcionando sus datos personales y credenciales.
+
+3. **Iniciar Sesión**: Los usuarios que ya tienen cuentas pueden ingresar sus credenciales para iniciar sesión.
+
+4. **Crear Usuario**: Cuando un usuario se registra, sus datos se almacenan en una base de datos SQLite3, incluyendo credenciales.
+
+5. **Validar Credenciales**: Cuando un usuario inicia sesión, el sistema verifica las credenciales ingresadas.
+
+6. **Almacenar en SQLite3**: Las credenciales y otros datos de usuario se almacenan de manera segura en una base de datos SQLite3 para su posterior validación.
+
+7. **Consultar en la Base de Datos**: Se realiza una consulta a la base de datos SQLite3 para verificar si las credenciales son correctas.
+
+8. **Redirigir a Página de Inicio**: Si las credenciales son correctas, se redirige al usuario a la página de inicio, donde pueden gestionar sus tareas.
+
+9. **Autenticación Exitosa**: Si la autenticación es exitosa, el usuario tiene acceso a su perfil y sus tareas. Si es un superusuario, también tiene acceso a la gestión de usuarios normales.
 
