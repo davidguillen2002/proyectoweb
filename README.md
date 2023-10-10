@@ -45,7 +45,9 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
 
 ### Diagrama Login:
 
-![Diagrama Login](URL_DE_LA_IMAGEN)
+<p align="center">
+  <img src="[https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20de%20Arquitectura%20(Django).png](https://github.com/davidguillen2002/proyectoweb/blob/master/Login.drawio.png)" alt="Diagrama de Arquitectura (Login)">
+</p>
 
 ### Explicación del diagrama actualizado:
 
