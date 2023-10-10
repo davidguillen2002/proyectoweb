@@ -5,17 +5,13 @@
     <a href="{% url 'tareas' %}">&#x2B05; Volver</a>
 </div>
 
-
-
 <div class="cuerpo-tarjeta">
     <h1>Agrega una nueva tarea</h1>
-    <form method="POST" action="">
+    <form method="POST">
     {% csrf_token %}
     {{form.as_p}}
     <input class="boton" type="submit" value="Enviar">
 </form>
 </div>
-
-
 
 {% endblock content %}
