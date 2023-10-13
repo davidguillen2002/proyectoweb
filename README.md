@@ -49,7 +49,7 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
   <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Login.drawio.png" alt="Diagrama de Arquitectura (Login)">
 </p>
 
-### Explicación del diagrama actualizado:
+### Explicación del Diagrama Login:
 
 1. **Página de Login**: Los usuarios llegan a la página de inicio de sesión donde pueden elegir entre registrarse como nuevo usuario o iniciar sesión con sus credenciales existentes.
 
