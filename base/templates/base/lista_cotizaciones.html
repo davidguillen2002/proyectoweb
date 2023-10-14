@@ -1,0 +1,34 @@
+{% extends 'base/principal.html' %}
+{% block content %}
+<div class="barra-superior">
+    <h1>Mis Cotizaciones</h1>
+    <a href="{% url 'cotizar' %}">Crear nueva cotizacion</a>
+</div>
+<div class="cuerpo-tarjeta">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Año</th>
+                <th>Valor</th>
+                <th>Tipo de Siniestro</th>
+                <th>Valor Cotizado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cotizacion in cotizaciones %}
+            <tr>
+                <td>{{ cotizacion.vehiculo.marca }}</td>
+                <td>{{ cotizacion.vehiculo.modelo }}</td>
+                <td>{{ cotizacion.vehiculo.año }}</td>
+                <td>{{ cotizacion.vehiculo.valor }}</td>
+                <td>{{ cotizacion.vehiculo.get_tipo_siniestro_display }}</td>
+                <td>{{ cotizacion.valor_cotizado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

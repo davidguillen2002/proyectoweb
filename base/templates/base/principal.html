@@ -6,22 +6,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gabarito&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #DEFDFA;
+            background-color: #E9F5F4;
             font-family: 'Gabarito', cursive;
-            padding-top: 70px;
+            padding-top: 40px;
+            transition: background 0.3s;
+        }
+
+        body:hover {
+            background-color: #DEFDFA;
         }
 
         .container{
-            max-width: 600px;
+            max-width: 800px;
             margin: auto;
             background-color: #E4E2D2;
-            -webkit-box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
-            box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            border-radius: 5px;
         }
 
         h1,
@@ -31,110 +35,159 @@
         h5,
         h6 {
             font-family: 'Young Serif', serif;
+            transition: color 0.3s;
         }
 
-        a,
-        p {
+        h1:hover,
+        h2:hover,
+        h3:hover,
+        h4:hover,
+        h5:hover,
+        h6:hover {
             color: #717171;
+        }
+
+        a, p {
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        a:hover, p:hover {
+            color: #333;
         }
 
         .barra-superior{
             display: flex;
             justify-content: space-between;
-            color: #ffffff;
+            color: #fff;
             padding: 15px;
             border-radius: 5px 5px 0 0;
             background: linear-gradient(90deg, #BEB446, 0%, #CFC22E, 43%, #CFC22E 100%);
         }
 
-        .barra-superior a{
-            color: rgb(255, 255, 255);
-            text-decoration: none;
-        }
-
-        .envoltorio-tarea{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #ffffff;
-            border-top: 2px solid rgb(225, 225, 225);
-        }
-
-                .titulo-tarea{
-            display: flex;
-        }
-
-        .titulo-tarea a {
-            text-decoration: none;
-            color: #4B5156;
-            margin-left: 10px;
-        }
-
-        .icono-tarea-completa {
-            height: 20px;
-            width: 20px;
-            background-color: rgb(105, 162, 105);
-            border-radius: 50px;
-        }
-
-        .icono-tarea-incompleta {
-            height: 20px;
-            width: 20px;
-            background-color: rgb(218, 218, 218);
-            border-radius: 50px;
-        }
-
-        .enlace-eliminar {
-            text-decoration: none;
-            font-weight: 900;
-            color: #EA4220;
-            font-size: 22px;
-            line-height: 0;
-        }
-
-        #envoltorio-agregar-buscar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-        }
-
-        #enlace-agregar{
-            color: #0D9210;
-            text-decoration: none;
-            font-size: 42px;
-            text-shadow: 1px 1px #81413B;
-        }
-
-        input[type=text],
-        input[type=password],
-        textarea {
-            border: 1px solid #EB796F;
-            border-radius: 5px;
-            padding: 10px;
-            width: 90%;
-        }
-
-        label {
-            padding-top: 10px !important;
-            display: block;
-        }
-
-        .boton {
-            border: 1px solid #EB796F;
-            background-color: #FAFAFA;
-            color: #EB796F;
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
         .cuerpo-tarjeta {
             padding: 20px;
         }
+
+        input[type=text], input[type=password], textarea, .boton {
+            padding: 10px 15px;
+            border: none;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        input[type=text]:focus, input[type=password]:focus, textarea:focus {
+            box-shadow: 0 0 5px rgba(0, 128, 128, 0.5);
+            border: 1px solid #008080;
+        }
+
+        .boton {
+            background-color: #BEB446;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .boton:hover {
+            background-color: #CFC22E;
+        }
+
+        form a {
+            color: #BEB446;
+            transition: color 0.3s;
+        }
+
+        form a:hover {
+            color: #CFC22E;
+        }
+
+        /* Añadiendo animaciones */
+        .barra-superior, .cuerpo-tarjeta, .container, h1, a, p {
+            opacity: 0.8;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .barra-superior:hover, .cuerpo-tarjeta:hover, .container:hover, h1:hover, a:hover, p:hover {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+                /* Estilos adicionales */
+        .barra-superior div {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+        }
+
+        .barra-superior hr {
+            margin: 10px 0;
+            border: 0;
+            border-top: 2px solid #FFFFFF;
+        }
+
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #e1e1e1;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .list-group {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .list-group-item {
+            border: 1px solid #e1e1e1;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            border-color: #d43f00;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .float-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .cuerpo-tarjeta form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-row label {
+            width: 150px;  /* Esto determinará la anchura de la etiqueta. Ajusta según tus necesidades */
+        }
+
     </style>
 </head>
 <body>

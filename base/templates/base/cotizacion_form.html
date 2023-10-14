@@ -1,0 +1,48 @@
+{% extends 'base/principal.html' %}
+{% block content %}
+<div class="barra-superior">
+    <div>
+        <h1>Bienvenido {{request.user|title}}</h1>
+        <hr width="260%">
+        <h1>Cotizar vehículo</h1>
+    </div>
+    {% if request.user.is_authenticated %}
+        {% if request.user.is_superuser %}
+            <a href="{% url 'lista_usuarios' %}">&#x1F736; Listar y eliminar usuarios</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Salir</a>
+        <a href="{% url 'lista_cotizaciones' %}">Ver Cotizaciones</a>
+    {% else %}
+        <a href="{% url 'login' %}">Ingresar</a>
+    {% endif %}
+</div>
+<div class="cuerpo-tarjeta">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <label>{{ form.marca.label }}</label>
+            {{ form.marca }}
+        </div>
+        <div class="form-row">
+            <label>{{ form.modelo.label }}</label>
+            {{ form.modelo }}
+        </div>
+        <div class="form-row">
+            <label>{{ form.año.label }}</label>
+            {{ form.año }}
+        </div>
+        <div class="form-row">
+            <label>{{ form.valor.label }}</label>
+            {{ form.valor }}
+        </div>
+        <div class="form-row">
+            <label>{{ form.tipo_siniestro.label }}</label>
+            {{ form.tipo_siniestro }}
+        </div>
+        <button type="submit" class="boton">Cotizar</button>
+    </form>
+</div>
+{% endblock %}
+
+
+

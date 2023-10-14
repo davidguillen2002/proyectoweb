@@ -1,49 +1,27 @@
 {% extends 'base/principal.html' %}
+
 {% block content %}
-
-<style>
-    /* Estilo CSS para el contenedor de botones */
-    .botones-eliminar {
-        display: flex;
-        justify-content: flex-end; /* Alinea los botones a la derecha */
-        align-items: center; /* Alinea verticalmente los botones */
-    }
-
-    /* Estilo CSS para ajustar el espaciado entre los elementos */
-    .titulo-tarea i {
-        margin-right: 20px; /* Ajusta el margen entre el nombre y el botón */
-    }
-</style>
-
 <div class="barra-superior">
-    <div>
-        <h1>&#x1F736; Lista de Usuarios del Sistema</h1>
-        <h3><i>Como rol de superuser usted puede eliminar a los siguientes usuarios dentro del sistema:</i></h3>
-    </div>
-    <div>
-        <a href="{% url 'tareas' %}">Volver</a>
-    </div>
+    <h1>Usuarios registrados</h1>
+    <a href="{% url 'cotizar' %}">Volver</a>
 </div>
-
-<div class="envoltorio-items-tarea">
-    {% for usuario in usuarios_normales %}
-    <div class="envoltorio-tarea">
-        <div class="titulo-tarea">
-            <div class="icono-tarea-completa"></div>
-            <i>{{ usuario.username }}</i>
-        </div>
-        <form method="POST" class="botones-eliminar">
-            {% csrf_token %}
-            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-            <button type="submit" name="confirmar_eliminar" value="1" onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ usuario.username }}?')">ELIMINAR</button>
-        </form>
-    </div>
-    {% empty %}
-    <h3>No hay usuarios normales en el sistema</h3>
-    {% endfor %}
+<div class="cuerpo-tarjeta">
+    <ul class="list-group">
+        {% for user in usuarios_normales %}
+        <li class="list-group-item">
+            {{ user.username }}
+            <form method="post" class="float-right">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <button type="submit" name="confirmar_eliminar" class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
+{% endblock %}
 
-{% endblock content %}
+
 
 
 
