@@ -121,3 +121,24 @@ class ListaCotizaciones(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['cotizaciones'] = context['cotizaciones'].filter(vehiculo__usuario=self.request.user)
         return context
+
+class EditarCotizacion(LoginRequiredMixin, UpdateView):
+    model = Vehiculo
+    fields = ['marca', 'modelo', 'año', 'valor', 'tipo_siniestro']
+    template_name = 'base/cotizacion_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('lista_cotizaciones')
+
+    def form_valid(self, form):
+        vehiculo = form.save()
+        cotizacion = Cotizacion.objects.get(vehiculo=vehiculo)
+        cotizacion.valor_cotizado = calcular_cotizacion(vehiculo)
+        cotizacion.save()
+        return super().form_valid(form)
+
+
+class EliminarCotizacion(LoginRequiredMixin, DeleteView):
+    model = Cotizacion
+    template_name = 'base/cotizacion_confirm_delete.html'
+    success_url = reverse_lazy('lista_cotizaciones')

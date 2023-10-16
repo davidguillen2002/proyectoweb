@@ -5,7 +5,9 @@ from .views import (
     PaginaRegistro,
     listar_eliminar_usuarios,
     CotizacionView,
-    ListaCotizaciones
+    ListaCotizaciones,
+    EditarCotizacion,
+    EliminarCotizacion
 )
 
 urlpatterns = [
@@ -15,5 +17,7 @@ urlpatterns = [
     path('cotizar/', CotizacionView.as_view(), name='cotizar'),
     path('mis-cotizaciones/', ListaCotizaciones.as_view(), name='lista_cotizaciones'),
     path('listar-usuarios/', listar_eliminar_usuarios, name='lista_usuarios'),
+    path('editar-cotizacion/<int:pk>/', EditarCotizacion.as_view(), name='editar_cotizacion'),
+    path('eliminar-cotizacion/<int:pk>/', EliminarCotizacion.as_view(), name='eliminar_cotizacion'),
 ]
 

@@ -1,0 +1,14 @@
+{% extends 'base/principal.html' %}
+{% block content %}
+<div class="barra-superior">
+    <h1>Confirmar eliminación</h1>
+</div>
+<div class="cuerpo-tarjeta">
+    <p>¿Estás seguro que deseas eliminar la cotización para {{ object.vehiculo.marca }} {{ object.vehiculo.modelo }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Eliminar</button>
+        <a href="{% url 'lista_cotizaciones' %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
