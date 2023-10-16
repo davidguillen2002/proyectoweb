@@ -3,12 +3,13 @@
 <div class="barra-superior">
     <h1>Confirmar eliminación</h1>
 </div>
-<div class="cuerpo-tarjeta">
-    <p>¿Estás seguro que deseas eliminar la cotización para {{ object.vehiculo.marca }} {{ object.vehiculo.modelo }}?</p>
-    <form method="post">
+<div class="cuerpo-tarjeta" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+    <p style="color: #d9534f; font-size: 1.2em;">¿Estás seguro que deseas eliminar la cotización para <strong>{{ object.vehiculo.marca }} {{ object.vehiculo.modelo }}</strong>?</p>
+
+    <form method="post" style="display: flex; gap: 10px;">
         {% csrf_token %}
-        <button type="submit">Eliminar</button>
-        <a href="{% url 'lista_cotizaciones' %}">Cancelar</a>
+        <button type="submit" class="boton btn-danger">Eliminar</button>
+        <a href="{% url 'lista_cotizaciones' %}" class="boton">Cancelar</a>
     </form>
 </div>
 {% endblock %}

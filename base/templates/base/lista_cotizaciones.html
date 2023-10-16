@@ -1,37 +1,47 @@
 {% extends 'principal.html' %}
 
 {% block content %}
-<h1>Mis Cotizaciones</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Marca</th>
-            <th>Modelo</th>
-            <th>Año</th>
-            <th>Valor</th>
-            <th>Tipo de Siniestro</th>
-            <th>Valor Cotizado</th>
-            <th>Acciones</th>  <!-- Esta columna es para los botones de editar y eliminar -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for cotizacion in cotizaciones %}
-        <tr>
-            <td>{{ cotizacion.vehiculo.marca }}</td>
-            <td>{{ cotizacion.vehiculo.modelo }}</td>
-            <td>{{ cotizacion.vehiculo.año }}</td>
-            <td>{{ cotizacion.vehiculo.valor }}</td>
-            <td>{{ cotizacion.vehiculo.tipo_siniestro }}</td>
-            <td>{{ cotizacion.valor_cotizado }}</td>
-            <td>
-                <!-- Botón para editar la cotización -->
-                <a href="{% url 'editar_cotizacion' cotizacion.vehiculo.pk %}" class="btn">Editar</a>
-                <!-- Botón para eliminar la cotización -->
-                <a href="{% url 'eliminar_cotizacion' cotizacion.pk %}" class="btn btn-danger">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="barra-superior">
+    <div>
+        <h1>Mis Cotizaciones</h1>
+    </div>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">Salir</a>
+        <a href="{% url 'cotizar' %}">Realizar otra cotización</a>
+    {% else %}
+        <a href="{% url 'login' %}">Ingresar</a>
+    {% endif %}
+</div>
+<div class="cuerpo-tarjeta">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Año</th>
+                <th>Valor</th>
+                <th>Tipo de Siniestro</th>
+                <th>Valor Cotizado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cotizacion in cotizaciones %}
+            <tr>
+                <td>{{ cotizacion.vehiculo.marca }}</td>
+                <td>{{ cotizacion.vehiculo.modelo }}</td>
+                <td>{{ cotizacion.vehiculo.año }}</td>
+                <td>{{ cotizacion.vehiculo.valor }}</td>
+                <td>{{ cotizacion.vehiculo.tipo_siniestro }}</td>
+                <td>{{ cotizacion.valor_cotizado }}</td>
+                <td>
+                    <a href="{% url 'editar_cotizacion' cotizacion.vehiculo.pk %}" class="btn">Editar</a>
+                    <a href="{% url 'eliminar_cotizacion' cotizacion.pk %}" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
+
