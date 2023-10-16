@@ -64,6 +64,8 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
 6. **Almacenar en SQLite3**: Las credenciales y otros datos de usuario se almacenan de manera segura en una base de datos SQLite3 para su posterior validación.
 
 7. **Consultar en la Base de Datos**: Se realiza una consulta a la base de datos SQLite3 para verificar si las credenciales son correctas.
+8. **Redirigir a Página de Inicio**: Si las credenciales son correctas, se redirige al usuario a la página de inicio, donde pueden gestionar sus tareas.
+9. **Autenticación Exitosa**: Si la autenticación es exitosa, el usuario tiene acceso a su perfil y sus tareas. Si es un superusuario, también tiene acceso a la gestión de usuarios normales.
 
 # Diagrama de Aplicación del Diseño de Ingeniería
 ## App Web de Cotización de Seguros de Carros
@@ -108,9 +110,4 @@ Esta aplicación web permite a los usuarios realizar operaciones CRUD (Crear, Le
 4. La aplicación está desplegada en Render con la URL: [https://auto-seguros.onrender.com](https://auto-seguros.onrender.com).
 
 La aplicación parece bien estructurada, utilizando la arquitectura MVT (Modelo-Vista-Template) característica de Django. La lógica para calcular la cotización está claramente definida en la función `calcular_cotizacion()`. Esta función considera el año del vehículo, su valor y tipo de siniestro, y utiliza factores de cotización predefinidos para determinar el monto cotizado. La aplicación proporciona una solución integral para usuarios que buscan cotizar seguros de vehículos de manera rápida y sencilla.
-
-
-9. **Redirigir a Página de Inicio**: Si las credenciales son correctas, se redirige al usuario a la página de inicio, donde pueden gestionar sus tareas.
-
-10. **Autenticación Exitosa**: Si la autenticación es exitosa, el usuario tiene acceso a su perfil y sus tareas. Si es un superusuario, también tiene acceso a la gestión de usuarios normales.
 
