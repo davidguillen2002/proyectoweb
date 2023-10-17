@@ -12,8 +12,12 @@
             {{ user.username }}
             <form method="post" class="float-right">
                 {% csrf_token %}
-                <input type="hidden" name="user_id" value="{{ user.id }}">
-                <button type="submit" name="confirmar_eliminar" class="btn btn-danger btn-sm">Eliminar</button>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'editar_cotizacion' cotizacion.vehiculo.pk %}" class="btn">Editar</a>
+                        <a href="{% url 'eliminar_cotizacion' cotizacion.pk %}" class="btn-danger">Eliminar</a>
+                    </div>
+                </td>
             </form>
         </li>
         {% endfor %}

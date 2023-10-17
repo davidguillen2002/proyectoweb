@@ -117,10 +117,31 @@ class ListaCotizaciones(LoginRequiredMixin, ListView):
     template_name = 'base/lista_cotizaciones.html'
     context_object_name = 'cotizaciones'
 
+    def get_queryset(self):
+        queryset = Cotizacion.objects.filter(vehiculo__usuario=self.request.user)
+
+        # Filtrado por rango de fechas
+        fecha_inicio = self.request.GET.get('fecha_inicio')
+        fecha_fin = self.request.GET.get('fecha_fin')
+
+        if fecha_inicio and fecha_fin:
+            try:
+                queryset = queryset.filter(creado__date__range=(fecha_inicio, fecha_fin))
+            except:
+                # manejar error de formato de fecha aquí si es necesario
+                pass
+
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cotizaciones'] = context['cotizaciones'].filter(vehiculo__usuario=self.request.user)
+
+        # Cálculo de pérdidas
+        perdidas_totales = sum([(c.vehiculo.valor - c.valor_cotizado) for c in context['cotizaciones']])
+        context['perdidas_totales'] = perdidas_totales
+
         return context
+
 
 class EditarCotizacion(LoginRequiredMixin, UpdateView):
     model = Vehiculo
