@@ -20,8 +20,6 @@ A continuación, se presenta un diagrama de arquitectura simplificado que repres
   <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20de%20Arquitectura%20(Django).png" alt="Diagrama de Arquitectura">
 </p>
 
-
-
 ## Explicación del Diagrama
 
 La aplicación web está construida utilizando el framework Django, que sigue el patrón de diseño Modelo-Vista-Plantilla (MVT).
@@ -46,7 +44,7 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
 ### Diagrama Login:
 
 <p align="center">
-  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Aplicaci%C3%B3n%20de%20Cotizaci%C3%B3n%20de%20Seguros.png" alt="Diagrama de Arquitectura (Login)">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Login.drawio.png" alt="Diagrama de Arquitectura (Login)">
 </p>
 
 ### Explicación del Diagrama Login:
@@ -71,7 +69,7 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
 ## App Web de Cotización de Seguros de Carros
 
 <p align="center">
-  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Aplicaci%C3%B3n_Cotizaci%C3%B3n_Seguros_MINICORE.png">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Aplicaci%C3%B3n%20de%20Cotizaci%C3%B3n%20de%20Seguros.png">
 </p>
 
 ### Descripción
