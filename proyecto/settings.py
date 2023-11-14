@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-@yxi$-yckg4^%rh7xlkzxyhb&62*93&$&cqflhjpj3qs+_j2%s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['https://nutrivista.onrender.com']
 
 # Application definition
 
