@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-@yxi$-yckg4^%rh7xlkzxyhb&62*93&$&cqflhjpj3qs+_j2%s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['strong-shortbread-7f29ab.netlify.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['auto-seguros.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
