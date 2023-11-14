@@ -51,7 +51,7 @@ urlpatterns = [
 
     path('super/eliminar_nutriente_de_alimento/<int:alimento_id>/<int:relacion_id>/',
          eliminar_nutriente_de_alimento, name='eliminar_nutriente_de_alimento')
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
