@@ -1,33 +1,6 @@
 {% load static %}
 <html>
 
-<style>
-    .contact_section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;  /* Asume todo el alto visible de la pantalla */
-    }
-
-    .form_container {
-        width: 80%;  /* Puede ajustar esto según lo que necesites */
-        margin: 0 auto;
-    }
-
-    .table thead th {
-    background-color: #333; /* Adjust this color as needed */
-    color: white; /* Color of the text */
-    text-align: center; /* Center align the text */
-    padding: 10px 5px; /* Adjust the padding as needed for vertical alignment */
-    }
-
-    .table tbody tr {
-        background-color: #f9f9f9;  /* A light grey color */
-        color: black;   /* Making text color black */
-    }
-</style>
-
-
 <head>
     <!-- Basic -->
     <meta charset="utf-8" />
@@ -122,23 +95,29 @@
     </div>
 
 
-    <!-- confirmar eliminación section -->
-    <section class="contact_section center">
+    <!-- eliminar nutriente de alimento section -->
+    <section class="contact_section ">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
+                <div class="col-md-6 px-0">
+                    <div class="img-box">
+                        <img src="{% static 'images/2317045.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2">
                         <div class="heading_container">
                             <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
+                                ¿Está seguro de que desea eliminar el nutriente {{ relacion.nutriente.nombre }} de {{ alimento.nombre }}?
                             </h2>
                         </div>
                         <form method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
+                            <div class="d-flex justify-content-between mb-3">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </div>
                         </form>
+                        <a href="{% url 'listar_todos_alimentos' %}" class="btn btn-secondary">Regresar a la lista de alimentos</a>
                     </div>
                 </div>
             </div>
@@ -162,4 +141,5 @@
 </body>
 
 </html>
+
 

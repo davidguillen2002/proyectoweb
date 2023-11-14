@@ -122,7 +122,7 @@
     </div>
 
 
-    <!-- confirmar eliminación section -->
+    <!-- listado de nutrientes section -->
     <section class="contact_section center">
         <div class="container-fluid">
             <div class="row">
@@ -130,15 +130,41 @@
                     <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
                         <div class="heading_container">
                             <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
+                                Listado de Nutrientes
                             </h2>
                         </div>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
-                        </form>
+                        <!-- Enlace para añadir un nuevo nutriente -->
+                        <div class="mb-3">
+                            <a href="{% url 'agregar_nutriente' %}" class="btn btn-primary">Agregar Nuevo Nutriente</a>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nutriente in nutrientes %}
+                                <tr>
+                                    <td>{{ nutriente.nombre }}</td>
+                                    <td>{{ nutriente.tipo }}</td>
+                                    <td>
+                                        <a href="{% url 'editar_nutriente' nutriente.id %}" class="btn btn-warning">Editar</a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'eliminar_nutriente' nutriente.id %}" class="btn btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No hay nutrientes registrados.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -162,4 +188,5 @@
 </body>
 
 </html>
+
 

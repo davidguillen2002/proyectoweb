@@ -122,7 +122,7 @@
     </div>
 
 
-    <!-- confirmar eliminación section -->
+    <!-- todos los alimentos section -->
     <section class="contact_section center">
         <div class="container-fluid">
             <div class="row">
@@ -130,15 +130,19 @@
                     <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
                         <div class="heading_container">
                             <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
+                                Todos los alimentos
                             </h2>
                         </div>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
-                        </form>
+                        <ul class="list-unstyled">
+                            {% for alimento in alimentos %}
+                                <li class="mb-2">
+                                    {{ alimento.nombre }}
+                                    <a href="{% url 'agregar_nutriente_a_alimento' alimento.id %}" class="btn btn-primary ml-2">Agregar Nutriente</a>
+                                </li>
+                            {% empty %}
+                                <li>No hay alimentos registrados.</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -162,4 +166,3 @@
 </body>
 
 </html>
-

@@ -27,7 +27,6 @@
     }
 </style>
 
-
 <head>
     <!-- Basic -->
     <meta charset="utf-8" />
@@ -91,6 +90,9 @@
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'agregar_alimento' %}"> Agregar Alimento</a>
                             </li>
+                              <li class="nav-item">
+                              <a class="nav-link" href="{% url 'listar_alimentos' %}"> Listar Alimentos</a>
+                            </li>
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'registro_diario' %}"> Registro Diario</a>
                             </li>
@@ -122,23 +124,87 @@
     </div>
 
 
-    <!-- confirmar eliminación section -->
-    <section class="contact_section center">
+    <!-- análisis nutricional section -->
+    <section class="contact_section ">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
+                <div class="col-md-6 px-0">
+                    <div class="img-box">
+                        <!-- Aquí puedes poner alguna imagen relevante para el análisis nutricional -->
+                        <img src="{% static 'images/2317045.png' %}" alt="Imagen Análisis Nutricional">
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2">
                         <div class="heading_container">
                             <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
+                                Resumen Nutricional y Sugerencias
                             </h2>
                         </div>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
-                        </form>
+
+                        <!-- Aquí empieza el contenido de tu análisis nutricional -->
+                        <div class="container mt-5">
+                            <h2>Tu BMR: {{ bmr }} calorias</h2>
+                            <table class="table table-bordered mt-4">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Ítem</th>
+                                        <th scope="col">Consumido</th>
+                                        <th scope="col">Necesario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Calorías (Kcal)</td>
+                                        <td>{{ analisis.calorias_consumidas }}</td>
+                                        <td>{{ analisis.calorias_necesarias }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Proteínas (g)</td>
+                                        <td>{{ analisis.proteinas_consumidas }}</td>
+                                        <td>{{ analisis.proteinas_necesarias }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carbohidratos (g)</td>
+                                        <td>{{ analisis.carbohidratos_consumidas }}</td>
+                                        <td>{{ analisis.carbohidratos_necesarios }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Grasas (g)</td>
+                                        <td>{{ analisis.grasas_consumidas }}</td>
+                                        <td>{{ analisis.grasas_necesarias }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h3 class="mt-5">Recomendaciones</h3>
+                            <ul>
+                                {% for recomendacion in analisis.recomendaciones %}
+                                    <li>{{ recomendacion }}</li>
+                                {% endfor %}
+                            </ul>
+
+
+                            <h3 class="mt-5">Sugerencias de alimentos:</h3>
+                            <ul>
+                                {% for alimento in sugerencias_macro_micro %}
+                                    <li>
+                                        {{ alimento.nombre }} -
+                                        Proteínas: {{ alimento.proteinas }},
+                                        Carbohidratos: {{ alimento.carbohidratos }},
+                                        Grasas: {{ alimento.grasas }}
+                                        {% for nutriente in alimento.alimentonutriente_set.all %}
+                                            - {{ nutriente.nutriente.nombre }}: {{nutriente.cantidad}} {{ nutriente.unidad }}
+                                        {% endfor %}
+                                        <div>
+                                            <a href="{% url 'registro_diario'%}" class="btn btn-warning">Registrar Alimento</a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Aquí termina el contenido de tu análisis nutricional -->
+
                     </div>
                 </div>
             </div>
@@ -151,7 +217,7 @@
     <footer class="container-fluid footer_section">
         <p>
             &copy; 2023 All Rights Reserved. Design by NutriVista
-            <a href="https://github.com/davidguillen2002/proyectoweb.git">GitHub</a>
+            <a href="https://html.design/">Free Html Templates</a>
         </p>
     </footer>
     <!-- footer section -->
@@ -162,4 +228,6 @@
 </body>
 
 </html>
+
+
 

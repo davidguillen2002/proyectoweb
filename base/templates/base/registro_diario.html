@@ -1,33 +1,6 @@
 {% load static %}
 <html>
 
-<style>
-    .contact_section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;  /* Asume todo el alto visible de la pantalla */
-    }
-
-    .form_container {
-        width: 80%;  /* Puede ajustar esto según lo que necesites */
-        margin: 0 auto;
-    }
-
-    .table thead th {
-    background-color: #333; /* Adjust this color as needed */
-    color: white; /* Color of the text */
-    text-align: center; /* Center align the text */
-    padding: 10px 5px; /* Adjust the padding as needed for vertical alignment */
-    }
-
-    .table tbody tr {
-        background-color: #f9f9f9;  /* A light grey color */
-        color: black;   /* Making text color black */
-    }
-</style>
-
-
 <head>
     <!-- Basic -->
     <meta charset="utf-8" />
@@ -91,6 +64,9 @@
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'agregar_alimento' %}"> Agregar Alimento</a>
                             </li>
+                              <li class="nav-item">
+                              <a class="nav-link" href="{% url 'listar_alimentos' %}"> Listar Alimentos</a>
+                            </li>
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'registro_diario' %}"> Registro Diario</a>
                             </li>
@@ -121,23 +97,51 @@
         <!-- end header section -->
     </div>
 
+        <!-- Mostrando el contador justo antes de la sección "Registro Diario" -->
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div id="contador" class="display-4"></div>
+        </div>
+    </div>
 
-    <!-- confirmar eliminación section -->
-    <section class="contact_section center">
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+
+    <!-- registro diario section -->
+    <section class="contact_section ">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
+                <div class="col-md-6 px-0">
+                    <div class="img-box">
+                        <!-- Cambiar la imagen si tienes otra específica para Registro Diario -->
+                        <img src="{% static 'images/2317045.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2">
                         <div class="heading_container">
                             <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
+                                Registro Diario
                             </h2>
                         </div>
                         <form method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
+                            {{ form.as_p }}
+                            <div class="d-flex ">
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -158,8 +162,29 @@
 
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
+    <!-- Script para el contador -->
+    <script>
+        function actualizarContador() {
+            const ahora = new Date();
+            const medianoche = new Date(ahora);
+            medianoche.setHours(24, 0, 0, 0);
+            const tiempoRestante = medianoche - ahora;
+            const horas = Math.floor(tiempoRestante / (1000 * 60 * 60));
+            const minutos = Math.floor((tiempoRestante % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((tiempoRestante % (1000 * 60)) / 1000);
+
+            document.getElementById('contador').innerHTML = horas + "h " + minutos + "m " + segundos + "s ";
+
+            setTimeout(actualizarContador, 1000);
+        }
+
+        window.onload = actualizarContador;
+    </script>
 
 </body>
 
 </html>
+
+
+
 

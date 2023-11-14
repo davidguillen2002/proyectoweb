@@ -122,28 +122,48 @@
     </div>
 
 
-    <!-- confirmar eliminación section -->
-    <section class="contact_section center">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
-                        <div class="heading_container">
-                            <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
-                            </h2>
+        <!-- listar usuarios inactivos section -->
+        <section class="contact_section center">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
+                            <div class="heading_container">
+                                <h2>
+                                    Usuarios Inactivos
+                                </h2>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre de Usuario</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for usuario in usuarios_sin_registros %}
+                                    <tr>
+                                        <td>{{ usuario.username }}</td>
+                                        <td>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                                                <button type="submit" name="eliminar" class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2">No hay usuarios inactivos registrados.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
-                        </form>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <!-- end agregar alimento section -->
 
@@ -162,4 +182,3 @@
 </body>
 
 </html>
-

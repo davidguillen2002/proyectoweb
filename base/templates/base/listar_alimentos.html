@@ -91,6 +91,9 @@
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'agregar_alimento' %}"> Agregar Alimento</a>
                             </li>
+                              <li class="nav-item">
+                              <a class="nav-link" href="{% url 'listar_alimentos' %}"> Listar Alimentos</a>
+                            </li>
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'registro_diario' %}"> Registro Diario</a>
                             </li>
@@ -122,7 +125,7 @@
     </div>
 
 
-    <!-- confirmar eliminación section -->
+    <!-- listado de alimentos section -->
     <section class="contact_section center">
         <div class="container-fluid">
             <div class="row">
@@ -130,15 +133,50 @@
                     <div class="form_container pr-0 pr-lg-5 mr-0 mr-lg-2 mx-auto">
                         <div class="heading_container">
                             <h2>
-                                ¿Estás seguro de que quieres eliminar al usuario {{ usuario.username }}?
+                                Listado de Alimentos
                             </h2>
                         </div>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <input type="submit" class="btn btn-danger" value="Confirmar" name="confirmar_eliminar">
-                            <a href="{% url 'lista_usuarios_inactivos' %}" class="btn btn-primary">Cancelar</a>
-                        </form>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Calorías</th>
+                                    <th>Proteínas</th>
+                                    <th>Carbohidratos</th>
+                                    <th>Grasas</th>
+                                    <th>Descripción</th>
+                                    <th>Imagen</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alimento in alimentos %}
+                                <tr>
+                                    <td>{{ alimento.nombre }}</td>
+                                    <td>{{ alimento.calorias }}</td>
+                                    <td>{{ alimento.proteinas }}</td>
+                                    <td>{{ alimento.carbohidratos }}</td>
+                                    <td>{{ alimento.grasas }}</td>
+                                    <td>{{ alimento.descripcion }}</td>
+                                    <td>
+                                        {% if alimento.imagen %}
+                                        <img src="{{ alimento.imagen.url }}" alt="{{ alimento.nombre }}" height="50">
+                                        {% else %}
+                                        No disponible
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'editar_alimento' alimento.id %}" class="btn btn-warning">Editar</a>
+                                        <a href="{% url 'eliminar_alimento' alimento.id %}" class="btn btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8">No hay alimentos registrados.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -162,4 +200,3 @@
 </body>
 
 </html>
-

@@ -1,30 +1,42 @@
-{% extends 'base/principal.html' %}
-{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Page</title>
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+</head>
+<body>
+    <section>
+    <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
 
-<div class="barra-superior">
-    <h1>Registro de Usuario</h1>
-</div>
-
-<div class="cuerpo-tarjeta">
-    <form method="POST">
-    {% csrf_token %}
-        <div class="campo-formulario">
-            <label>{{form.username.label}}</label>
-            {{form.username}}
+        <div class="signin">
+            <div class="content">
+                <h2>Register</h2>
+                <form method="POST" class="form">
+                    {% csrf_token %}
+                    <div class="inputBox">
+                        {{ form.username }}
+                        <i>Username</i>
+                    </div>
+                    <div class="inputBox">
+                        {{ form.password1 }}
+                        <i>Password</i>
+                    </div>
+                    <div class="inputBox">
+                        {{ form.password2 }}
+                        <i>Password</i>
+                    </div>
+                    <div class="links">
+                        <a href="#">Already have an account?</a>
+                        <a href="{% url 'login' %}">Login</a>
+                    </div>
+                    <div class="inputBox">
+                        <input type="submit" value="Login">
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="campo-formulario">
-            <label>{{form.password1.label}}</label>
-            {{form.password1}}
-        </div>
-
-        <div class="campo-formulario">
-            <label>{{form.password2.label}}</label>
-            {{form.password2}}
-        </div>
-    <input style="margin-top: 10px" class="boton" type="submit" value="Registrar">
-    </form>
-    <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Ingresar</a></p>
-</div>
-
-{% endblock content %}
+    </section>
+</body>
+</html>
