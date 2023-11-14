@@ -20,8 +20,6 @@ A continuación, se presenta un diagrama de arquitectura simplificado que repres
   <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20de%20Arquitectura%20(Django).png" alt="Diagrama de Arquitectura">
 </p>
 
-
-
 ## Explicación del Diagrama
 
 La aplicación web está construida utilizando el framework Django, que sigue el patrón de diseño Modelo-Vista-Plantilla (MVT).
@@ -71,26 +69,30 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
 ## App Web de Cotización de Seguros de Carros
 
 <p align="center">
-  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Aplicaci%C3%B3n_Cotizaci%C3%B3n_Seguros_MINICORE.png">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Aplicaci%C3%B3n%20de%20Cotizaci%C3%B3n%20de%20Seguros.png">
 </p>
 
 ### Descripción
-Esta aplicación web permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en sus cotizaciones de seguros para vehículos. La cotización se basa en parámetros como el año del vehículo, precio y tipo de siniestro (Accidente, Robo, Falla de fábrica).
+Esta aplicación web permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en sus cotizaciones de seguros para vehículos. Además, ahora cuenta con funcionalidades de filtrado de búsqueda con rangos de fechas y cálculo de pérdidas totales en ese rango. La cotización se basa en parámetros como el año del vehículo, precio y tipo de siniestro (Accidente, Robo, Falla de fábrica).
 
 ### Componentes Principales
 
 #### Usuario
 - Registro/Login.
 - CRUD de Cotizaciones.
+- Filtro de cotizaciones por rango de fechas.
 
 #### Base de Datos SQLite3
 - Almacena información del usuario, vehículos, factores de cotización y cotizaciones generadas.
+- Registro de pérdidas por cotizaciones.
 
 #### Vistas (views.py)
 - Autenticación.
 - CRUD de Cotizaciones.
-- Lista de usuarios y eliminación para superusuarios.
+- Lista y eliminación de usuarios (superusuarios).
 - Cálculo de cotizaciones.
+- Filtro de cotizaciones por rango de fechas.
+- Cálculo de pérdidas totales por rango de fechas.
 
 #### Modelos (models.py)
 - **Vehiculo**: Almacena datos del vehículo incluyendo marca, modelo, año, valor y tipo de siniestro.
@@ -98,16 +100,17 @@ Esta aplicación web permite a los usuarios realizar operaciones CRUD (Crear, Le
 - **Cotizacion**: Asocia un vehículo con un valor cotizado.
 
 #### URLs (urls.py)
-- Define rutas para las vistas, incluyendo login, registro, CRUD de cotizaciones, y más.
+- Define rutas para las vistas, incluyendo login, registro, CRUD de cotizaciones, filtrado por fechas y más.
 
 #### Templates
-- Interfaz de usuario para todas las funcionalidades, como registro, login, cotización, entre otros.
+- Interfaz de usuario para todas las funcionalidades, como registro, login, cotización, filtrado por fechas, visualización de pérdidas y más.
 
 ### Funcionamiento
 1. El usuario se registra o inicia sesión.
 2. Una vez autenticado, el usuario puede agregar detalles de su vehículo y obtener una cotización basada en los parámetros y los factores de cotización definidos en la base de datos.
-3. Los superusuarios tienen la capacidad de listar y eliminar usuarios.
-4. La aplicación está desplegada en Render con la URL: [https://auto-seguros.onrender.com](https://auto-seguros.onrender.com).
+3. Los usuarios pueden filtrar cotizaciones por un rango de fechas específico y ver las pérdidas totales en ese período.
+4. Los superusuarios tienen la capacidad de listar y eliminar usuarios.
+5. La aplicación está desplegada en Render con la URL: [https://auto-seguros.onrender.com](https://auto-seguros.onrender.com).
 
 La aplicación parece bien estructurada, utilizando la arquitectura MVT (Modelo-Vista-Template) característica de Django. La lógica para calcular la cotización está claramente definida en la función `calcular_cotizacion()`. Esta función considera el año del vehículo, su valor y tipo de siniestro, y utiliza factores de cotización predefinidos para determinar el monto cotizado. La aplicación proporciona una solución integral para usuarios que buscan cotizar seguros de vehículos de manera rápida y sencilla.
 
