@@ -3,3 +3,4 @@ Django
 sqlparse==0.4.4
 tzdata==2023.3
 gunicorn
+Pillow
