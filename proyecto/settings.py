@@ -68,6 +68,11 @@ TEMPLATES = [
     },
 ]
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'base' / 'static',
+]
+
+
 WSGI_APPLICATION = 'proyecto.wsgi.application'
 
 
@@ -129,8 +134,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-SKIP_INSTALL_DEPS = True
 
 
 
