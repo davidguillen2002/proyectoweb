@@ -120,3 +120,30 @@ Este diagrama proporciona una vista de alto nivel de cómo se estructura la apli
 - Se calculan las necesidades nutricionales del usuario basadas en su perfil.
 - La aplicación proporciona sugerencias de alimentos para cumplir con las necesidades nutricionales del usuario.
 
+### Sección Diseño de Ingeniería: Funcionamiento del Admin
+Esta sección describe cómo funciona la administración del sistema, incluyendo las operaciones CRUD para diferentes entidades como alimentos, nutrientes y usuarios.
+
+#### Funcionalidades del Admin
+
+- **Gestión de Usuarios:** Listar usuarios inactivos, agregar, editar y eliminar usuarios.
+- **Gestión de Nutrientes:** Agregar, listar, editar y eliminar nutrientes.
+- **Gestión de Alimentos:** Agregar, listar, editar y eliminar alimentos, así como gestionar los nutrientes asociados a los alimentos.
+
+#### Diagrama de Funcionamiento del Admin
+
+```plantuml
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+package "Admin" {
+  [Listar Usuarios Inactivos] --> [Agregar Nutriente]
+  [Agregar Nutriente] --> [Listar Nutrientes]
+  [Listar Nutrientes] --> [Editar Nutriente]
+  [Editar Nutriente] --> [Eliminar Nutriente]
+  [Eliminar Nutriente] --> [Listar Todos los Alimentos]
+  [Listar Todos los Alimentos] --> [Agregar Nutriente a Alimento]
+  [Agregar Nutriente a Alimento] --> [Editar Nutriente de Alimento]
+  [Editar Nutriente de Alimento] --> [Eliminar Nutriente de Alimento]
+}
+@enduml
