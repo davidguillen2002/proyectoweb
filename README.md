@@ -66,51 +66,84 @@ El sistema de login desarrollado permite a los usuarios registrarse e iniciar se
 9. **Autenticación Exitosa**: Si la autenticación es exitosa, el usuario tiene acceso a su perfil y sus tareas. Si es un superusuario, también tiene acceso a la gestión de usuarios normales.
 
 # Diagrama de Aplicación del Diseño de Ingeniería
-## App Web de Cotización de Seguros de Carros
+## App Web de Gestión Nutricional
 
 <p align="center">
-  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Aplicaci%C3%B3n%20de%20Cotizaci%C3%B3n%20de%20Seguros.png">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20de%20App%20Nutricional.png">
 </p>
 
 ### Descripción
-Esta aplicación web permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en sus cotizaciones de seguros para vehículos. Además, ahora cuenta con funcionalidades de filtrado de búsqueda con rangos de fechas y cálculo de pérdidas totales en ese rango. La cotización se basa en parámetros como el año del vehículo, precio y tipo de siniestro (Accidente, Robo, Falla de fábrica).
+Este diagrama proporciona una vista de alto nivel de cómo se estructura la aplicación. Las clases y paquetes representan distintas responsabilidades y cómo interactúan entre sí. Los detalles específicos de cada clase (como métodos y propiedades) deben ser añadidos según las necesidades específicas de tu proyecto.
 
 ### Componentes Principales
 
 #### Usuario
-- Registro/Login.
-- CRUD de Cotizaciones.
-- Filtro de cotizaciones por rango de fechas.
+- Registro e inicio de sesión.
+- CRUD (Crear, Leer, Actualizar, Eliminar) de alimentos.
+- Registro y análisis diario de ingesta nutricional.
+- Gestión de perfil nutricional.
+- Sugerencias de alimentos basadas en necesidades nutricionales.
 
 #### Base de Datos SQLite3
-- Almacena información del usuario, vehículos, factores de cotización y cotizaciones generadas.
-- Registro de pérdidas por cotizaciones.
+- Almacena información de usuarios, alimentos, nutrientes, registros diarios y perfiles nutricionales.
 
 #### Vistas (views.py)
-- Autenticación.
-- CRUD de Cotizaciones.
-- Lista y eliminación de usuarios (superusuarios).
-- Cálculo de cotizaciones.
-- Filtro de cotizaciones por rango de fechas.
-- Cálculo de pérdidas totales por rango de fechas.
+- Autenticación de usuarios.
+- CRUD de alimentos y nutrientes.
+- Listado y gestión de usuarios (para superusuarios).
+- Análisis de ingesta nutricional y sugerencias de alimentos.
+- Registro y análisis de perfiles nutricionales.
 
 #### Modelos (models.py)
-- **Vehiculo**: Almacena datos del vehículo incluyendo marca, modelo, año, valor y tipo de siniestro.
-- **FactorCotizacion**: Define factores de cotización basados en el año del vehículo y tipo de siniestro.
-- **Cotizacion**: Asocia un vehículo con un valor cotizado.
+- **Alimento:** Información detallada del alimento.
+- **Nutriente:** Información detallada del nutriente.
+- **RegistroDiario:** Registro de ingesta diaria del usuario.
+- **PerfilNutricional:** Perfil nutricional del usuario.
+- **AlimentoNutriente:** Relación entre alimentos y nutrientes.
 
 #### URLs (urls.py)
-- Define rutas para las vistas, incluyendo login, registro, CRUD de cotizaciones, filtrado por fechas y más.
+- Define rutas para las diferentes vistas, incluyendo autenticación, gestión de alimentos y nutrientes, análisis nutricional, etc.
 
 #### Templates
-- Interfaz de usuario para todas las funcionalidades, como registro, login, cotización, filtrado por fechas, visualización de pérdidas y más.
+- Interfaces de usuario para todas las funcionalidades, incluyendo registro, inicio de sesión, gestión de alimentos, análisis nutricional, etc.
 
 ### Funcionamiento
-1. El usuario se registra o inicia sesión.
-2. Una vez autenticado, el usuario puede agregar detalles de su vehículo y obtener una cotización basada en los parámetros y los factores de cotización definidos en la base de datos.
-3. Los usuarios pueden filtrar cotizaciones por un rango de fechas específico y ver las pérdidas totales en ese período.
-4. Los superusuarios tienen la capacidad de listar y eliminar usuarios.
-5. La aplicación está desplegada en Render con la URL: [https://auto-seguros.onrender.com](https://auto-seguros.onrender.com).
+1. Cálculo de necesidades nutricionales basado en el perfil del usuario.
+2. Análisis de ingesta diaria y recomendaciones para cumplir con los objetivos nutricionales.
+3. Sugerencias de alimentos ricos en micronutrientes y macronutrientes.
+4. La aplicación está desplegada en Render con la URL: [https://nutrivista.onrender.com](https://nutrivista.onrender.com).
 
-La aplicación parece bien estructurada, utilizando la arquitectura MVT (Modelo-Vista-Template) característica de Django. La lógica para calcular la cotización está claramente definida en la función `calcular_cotizacion()`. Esta función considera el año del vehículo, su valor y tipo de siniestro, y utiliza factores de cotización predefinidos para determinar el monto cotizado. La aplicación proporciona una solución integral para usuarios que buscan cotizar seguros de vehículos de manera rápida y sencilla.
+### Funcionamiento General
+- Los usuarios se registran y acceden a la aplicación.
+- Pueden agregar alimentos, registrar su ingesta diaria y recibir análisis y sugerencias nutricionales.
+- Los superusuarios gestionan la base de datos de alimentos y nutrientes.
+- Se calculan las necesidades nutricionales del usuario basadas en su perfil.
+- La aplicación proporciona sugerencias de alimentos para cumplir con las necesidades nutricionales del usuario.
 
+### Sección Diseño de Ingeniería: Funcionamiento del Admin
+Esta sección describe cómo funciona la administración del sistema, incluyendo las operaciones CRUD para diferentes entidades como alimentos, nutrientes y usuarios.
+
+#### Funcionalidades del Admin
+
+- **Gestión de Usuarios:** Listar usuarios inactivos, agregar, editar y eliminar usuarios.
+- **Gestión de Nutrientes:** Agregar, listar, editar y eliminar nutrientes.
+- **Gestión de Alimentos:** Agregar, listar, editar y eliminar alimentos, así como gestionar los nutrientes asociados a los alimentos.
+
+#### Diagrama de Funcionamiento del Admin
+
+```plantuml
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+package "Admin" {
+  [Listar Usuarios Inactivos] --> [Agregar Nutriente]
+  [Agregar Nutriente] --> [Listar Nutrientes]
+  [Listar Nutrientes] --> [Editar Nutriente]
+  [Editar Nutriente] --> [Eliminar Nutriente]
+  [Eliminar Nutriente] --> [Listar Todos los Alimentos]
+  [Listar Todos los Alimentos] --> [Agregar Nutriente a Alimento]
+  [Agregar Nutriente a Alimento] --> [Editar Nutriente de Alimento]
+  [Editar Nutriente de Alimento] --> [Eliminar Nutriente de Alimento]
+}
+@enduml
