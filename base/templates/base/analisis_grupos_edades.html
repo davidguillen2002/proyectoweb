@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comparativa Nutricional por Edad</title>
+    <!-- Incluir CSS y JavaScript según sea necesario -->
+</head>
+<body>
+    <h1>Comparativa Nutricional por Grupo de Edad</h1>
+
+    <h2>Consumo en Jóvenes (<30 años)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Alimento</th>
+                <th>Calorías</th>
+                <th>Proteínas</th>
+                <th>Carbohidratos</th>
+                <th>Grasas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in consumo_jovenes %}
+            <tr>
+                <td>{{ registro.alimento }}</td>
+                <td>{{ registro.promedio_calorias }}</td>
+                <td>{{ registro.promedio_proteinas }}</td>
+                <td>{{ registro.promedio_carbohidratos }}</td>
+                <td>{{ registro.promedio_grasas }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Consumo en Adultos (>=30 años)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Alimento</th>
+                <th>Calorías</th>
+                <th>Proteínas</th>
+                <th>Carbohidratos</th>
+                <th>Grasas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in consumo_adultos %}
+            <tr>
+                <td>{{ registro.alimento }}</td>
+                <td>{{ registro.promedio_calorias }}</td>
+                <td>{{ registro.promedio_proteinas }}</td>
+                <td>{{ registro.promedio_carbohidratos }}</td>
+                <td>{{ registro.promedio_grasas }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

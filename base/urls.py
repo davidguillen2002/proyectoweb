@@ -22,7 +22,8 @@ from .views import (
     editar_nutriente,
     eliminar_nutriente,
     editar_nutriente_de_alimento,
-    eliminar_nutriente_de_alimento
+    eliminar_nutriente_de_alimento,
+    comparativa_nutricional
 )
 
 urlpatterns = [
@@ -44,6 +45,7 @@ urlpatterns = [
          name='agregar_nutriente_a_alimento'),
     path('agregar_nutriente/', agregar_nutriente, name='agregar_nutriente'),
     path('listar_nutrientes/', listar_nutrientes, name='listar_nutrientes'),
+    path('analisis_grupos_edades/', comparativa_nutricional, name='analisis_grupos_edades'),
     path('editar_nutriente/<int:nutriente_id>/', editar_nutriente, name='editar_nutriente'),
     path('eliminar_nutriente/<int:nutriente_id>/', eliminar_nutriente, name='eliminar_nutriente'),
     path('super/editar_nutriente_de_alimento/<int:alimento_id>/<int:relacion_id>/',
