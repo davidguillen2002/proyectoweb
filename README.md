@@ -131,19 +131,21 @@ Esta sección describe cómo funciona la administración del sistema, incluyendo
 
 #### Diagrama de Funcionamiento del Admin
 
-```plantuml
-@startuml
-left to right direction
-skinparam packageStyle rectangle
+<p align="center">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20Admin%20(Parte%201).png">
+</p>
 
-package "Admin" {
-  [Listar Usuarios Inactivos] --> [Agregar Nutriente]
-  [Agregar Nutriente] --> [Listar Nutrientes]
-  [Listar Nutrientes] --> [Editar Nutriente]
-  [Editar Nutriente] --> [Eliminar Nutriente]
-  [Eliminar Nutriente] --> [Listar Todos los Alimentos]
-  [Listar Todos los Alimentos] --> [Agregar Nutriente a Alimento]
-  [Agregar Nutriente a Alimento] --> [Editar Nutriente de Alimento]
-  [Editar Nutriente de Alimento] --> [Eliminar Nutriente de Alimento]
-}
-@enduml
+### Sección Diseño de Ingeniería Admin: Validación por Back-End
+Esta sección describe cómo el sistema valida las funcionalidades críticas en el back-end, asegurando la integridad y seguridad de los datos. Por ejemplo, la validación del algoritmo se realiza en el controlador en lugar de depender de JavaScript en el cliente.
+
+#### Validaciones Importantes
+
+- **Validación de Acciones de Usuario:** Solo los superusuarios pueden realizar acciones de gestión de nutrientes y alimentos.
+- **Validación de Formularios:** Todos los formularios utilizan validación de datos en el servidor para evitar inyecciones de datos maliciosos.
+- **Validación de Integridad de Datos:** Antes de eliminar o modificar nutrientes y alimentos, se verifica la existencia de relaciones y dependencias.
+
+#### Diagrama de Validaciones en el Back-End
+
+<p align="center">
+  <img src="https://github.com/davidguillen2002/proyectoweb/blob/master/Diagrama%20Admin%20(Parte%202).png">
+</p>
