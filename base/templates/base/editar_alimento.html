@@ -12,7 +12,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>NutriVista - Agregar Alimento</title>
+    <title>NutriVista</title>
 
     <!-- slider stylesheet -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -59,8 +59,11 @@
                                 <li class="nav-item ">
                                   <a class="nav-link" href="{% url 'listar_todos_alimentos' %}"> Administrar Alimentos</a>
                                 </li>
-                                <li class="nav-item ">
-                                  <a class="nav-link" href="{% url 'analisis_grupos_edades' %}"> Analisis Grupos</a>
+                                  <li class="nav-item ">
+                                      <a class="nav-link" href="{% url 'main_page' %}"> Analisis Grupos</a>
+                                </li>
+                                  <li class="nav-item ">
+                                      <a class="nav-link" href="{% url 'main_page' %}"> Analisis  Grupos Nutrientes</a>
                                 </li>
                                 {% endif %}
                                 {% if not user.is_superuser %}

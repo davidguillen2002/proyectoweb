@@ -136,35 +136,6 @@ def eliminar_nutriente_de_alimento(request, alimento_id, relacion_id):
 
     return render(request, 'base/eliminar_nutriente_de_alimento.html', {'alimento': alimento, 'relacion': relacion})
 
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
-def comparativa_nutricional(request):
-    # Dividir usuarios en grupos por edad
-    umbral_edad = 30
-    jovenes = PerfilNutricional.objects.filter(edad__lt=umbral_edad)
-    adultos = PerfilNutricional.objects.filter(edad__gte=umbral_edad)
-
-    # Obtener los usuarios correspondientes a los perfiles jóvenes y adultos
-    usuarios_jovenes = User.objects.filter(perfilnutricional__in=jovenes)
-    usuarios_adultos = User.objects.filter(perfilnutricional__in=adultos)
-
-    # Ahora usar esos conjuntos de usuarios en tus consultas
-    consumo_jovenes = RegistroDiario.objects.filter(usuario__in=usuarios_jovenes).values('alimento').annotate(
-        promedio_calorias=Avg('alimento__calorias'), promedio_proteinas=Avg('alimento__proteinas'),
-        promedio_carbohidratos=Avg('alimento__carbohidratos'), promedio_grasas=Avg('alimento__grasas'))
-    consumo_adultos = RegistroDiario.objects.filter(usuario__in=usuarios_adultos).values('alimento').annotate(
-        promedio_calorias=Avg('alimento__calorias'), promedio_proteinas=Avg('alimento__proteinas'),
-        promedio_carbohidratos=Avg('alimento__carbohidratos'), promedio_grasas=Avg('alimento__grasas'))
-
-    # Generar el contexto para el template
-    contexto = {
-        'consumo_jovenes': consumo_jovenes,
-        'consumo_adultos': consumo_adultos
-    }
-
-    return render(request, 'base/analisis_grupos_edades.html', contexto)
-
 class Logueo(LoginView):
     template_name = "base/login.html"
     field = '__all__'
