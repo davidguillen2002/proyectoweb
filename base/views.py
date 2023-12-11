@@ -13,7 +13,7 @@ from .forms import PerfilNutricionalForm, AlimentoForm, RegistroDiarioForm, Nutr
 from django.db.models import Count
 from datetime import date
 from django.contrib import messages
-from django.db.models import F, Avg
+from django.db.models import F
 from django.shortcuts import get_object_or_404
 
 @login_required
@@ -135,6 +135,110 @@ def eliminar_nutriente_de_alimento(request, alimento_id, relacion_id):
         return redirect('listar_todos_alimentos')
 
     return render(request, 'base/eliminar_nutriente_de_alimento.html', {'alimento': alimento, 'relacion': relacion})
+
+
+def analisis_consumo():
+    perfiles = PerfilNutricional.objects.all()
+    resultados = {
+        'menores_30': {'calorias': 0, 'proteinas': 0, 'carbohidratos': 0, 'grasas': 0, 'nutrientes': {}},
+        'mayores_30': {'calorias': 0, 'proteinas': 0, 'carbohidratos': 0, 'grasas': 0, 'nutrientes': {}}
+    }
+
+    for perfil in perfiles:
+        grupo = 'menores_30' if perfil.edad < 30 else 'mayores_30'
+
+        registros = RegistroDiario.objects.filter(usuario=perfil.usuario)
+        for registro in registros:
+            alimento = registro.alimento
+            resultados[grupo]['calorias'] += float(alimento.calorias) * float(registro.cantidad)
+            resultados[grupo]['proteinas'] += float(alimento.proteinas) * float(registro.cantidad)
+            resultados[grupo]['carbohidratos'] += float(alimento.carbohidratos) * float(registro.cantidad)
+            resultados[grupo]['grasas'] += float(alimento.grasas) * float(registro.cantidad)
+
+            nutrientes = AlimentoNutriente.objects.filter(alimento=alimento)
+            for nutriente in nutrientes:
+                if nutriente.nutriente.nombre not in resultados[grupo]['nutrientes']:
+                    resultados[grupo]['nutrientes'][nutriente.nutriente.nombre] = 0
+                resultados[grupo]['nutrientes'][nutriente.nutriente.nombre] += float(nutriente.cantidad) * float(registro.cantidad)
+
+    # Calcular promedios
+    for grupo in resultados:
+        total_usuarios = PerfilNutricional.objects.filter(edad__lt=30).count() if grupo == 'menores_30' else PerfilNutricional.objects.filter(edad__gte=30).count()
+        if total_usuarios > 0:
+            for key in ['calorias', 'proteinas', 'carbohidratos', 'grasas']:
+                resultados[grupo][key] /= total_usuarios
+            for nutriente in resultados[grupo]['nutrientes']:
+                resultados[grupo]['nutrientes'][nutriente] /= total_usuarios
+
+    return resultados
+
+
+def evaluar_grupos(resultados):
+    evaluacion = {
+        'grupo_mas_riesgo': '',
+        'razones': []
+    }
+
+    # Comparar consumo calórico
+    if resultados['menores_30']['calorias'] > resultados['mayores_30']['calorias']:
+        evaluacion['grupo_mas_riesgo'] = 'El grupo de menores de 30'
+        evaluacion['razones'].append('mayor consumo calórico')
+    else:
+        evaluacion['grupo_mas_riesgo'] = 'El grupo de mayores de 30'
+        evaluacion['razones'].append('mayor consumo calórico')
+
+    # Comparar macronutrientes
+    for nutriente in ['proteinas', 'carbohidratos', 'grasas']:
+        if resultados['menores_30'][nutriente] > resultados['mayores_30'][nutriente]:
+            evaluacion['razones'].append(f'mayor consumo de {nutriente} en menores de 30')
+        else:
+            evaluacion['razones'].append(f'mayor consumo de {nutriente} en mayores de 30')
+
+    # Comparar diversidad de nutrientes
+    nutrientes_menores_30 = set(resultados['menores_30']['nutrientes'].keys())
+    nutrientes_mayores_30 = set(resultados['mayores_30']['nutrientes'].keys())
+    if len(nutrientes_menores_30) < len(nutrientes_mayores_30):
+        evaluacion['razones'].append('menor diversidad de nutrientes en menores de 30.')
+    elif len(nutrientes_menores_30) > len(nutrientes_mayores_30):
+        evaluacion['razones'].append('menor diversidad de nutrientes en mayores de 30.')
+
+    return evaluacion
+
+# Ejecutar análisis y evaluación
+resultados_analisis = analisis_consumo()
+evaluacion_final = evaluar_grupos(resultados_analisis)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def vista_analisis(request):
+    resultados_analisis = analisis_consumo()
+    evaluacion_final = evaluar_grupos(resultados_analisis)
+
+    # Preparar datos para gráficos
+    datos_graficos = {
+        'menores_30': {
+            'calorias': resultados_analisis['menores_30']['calorias'],
+            'proteinas': resultados_analisis['menores_30']['proteinas'],
+            'carbohidratos': resultados_analisis['menores_30']['carbohidratos'],
+            'grasas': resultados_analisis['menores_30']['grasas'],
+            'nutrientes': resultados_analisis['menores_30']['nutrientes']
+        },
+        'mayores_30': {
+            'calorias': resultados_analisis['mayores_30']['calorias'],
+            'proteinas': resultados_analisis['mayores_30']['proteinas'],
+            'carbohidratos': resultados_analisis['mayores_30']['carbohidratos'],
+            'grasas': resultados_analisis['mayores_30']['grasas'],
+            'nutrientes': resultados_analisis['mayores_30']['nutrientes']
+        }
+    }
+
+    context = {
+        'evaluacion': evaluacion_final,
+        'datos_graficos': datos_graficos
+    }
+
+    return render(request, 'analisis-consumo.html', context)
 
 class Logueo(LoginView):
     template_name = "base/login.html"

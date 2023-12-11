@@ -41,7 +41,7 @@ class AlimentoNutriente(models.Model):
     alimento = models.ForeignKey(Alimento, on_delete=models.CASCADE)
     nutriente = models.ForeignKey(Nutriente, on_delete=models.CASCADE)
     cantidad = models.DecimalField(max_digits=6, decimal_places=2)
-    unidad = models.CharField(max_length=20)  # ej: mg, mcg, UI...
+    unidad = models.CharField(max_length=20)
 
     def __str__(self):
         return f"{self.alimento.nombre} - {self.nutriente.nombre}"
@@ -61,7 +61,7 @@ class RegistroDiario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     alimento = models.ForeignKey(Alimento, on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=True)
-    cantidad = models.DecimalField(max_digits=6, decimal_places=2)  # Puede ser por gramos, porciones, etc.
+    cantidad = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
         return f"{self.usuario.username} - {self.alimento.nombre} - {self.fecha}"

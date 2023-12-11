@@ -23,6 +23,7 @@ from .views import (
     eliminar_nutriente,
     editar_nutriente_de_alimento,
     eliminar_nutriente_de_alimento,
+    vista_analisis
 )
 
 urlpatterns = [
@@ -39,6 +40,7 @@ urlpatterns = [
     path('eliminar_alimento/<int:alimento_id>/', eliminar_alimento, name='eliminar_alimento'),
     path('sugerencias_alimentos/', sugerencias_alimentos, name='sugerencias_alimentos'),
     path('listar-usuarios-inactivos/', listar_usuarios_inactivos, name='lista_usuarios_inactivos'),
+path('analisis-consumo/', vista_analisis, name='analisis-consumo'),
     path('super/listar_todos_alimentos/', listar_todos_alimentos, name='listar_todos_alimentos'),
     path('super/agregar_nutriente_a_alimento/<int:alimento_id>/', agregar_nutriente_a_alimento,
          name='agregar_nutriente_a_alimento'),
