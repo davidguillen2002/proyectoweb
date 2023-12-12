@@ -1,0 +1,260 @@
+{% load static %}
+
+<html>
+<style>
+    .navbar-brand span {
+        color: #fff; /* Color del texto del logo */
+    }
+
+    .navbar-nav .nav-link {
+        color: #f8f9fa; /* Color de los enlaces */
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #ddd; /* Color de los enlaces al pasar el mouse */
+    }
+
+    /* Estilos para la Sección debajo del Navbar */
+    main {
+        background-color: #f8f9fa; /* Color de fondo claro */
+        padding: 20px; /* Espaciado interno */
+    }
+
+    .container-fluid {
+            background-color: #007bff; /* Color de fondo claro */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra opcional */
+    }
+</style>
+<head>
+    <!-- Metadatos y título -->
+    <meta charset="UTF-8">
+    <title>Análisis de Consumo - NutriVista</title>
+
+    <!-- Estilos CSS y fuentes -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+
+    <!-- CDN de Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="sub_page">
+    <!-- Encabezado de la página -->
+    <header class="header_section">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg custom_nav-container ">
+                    <a class="navbar-brand" href="{% url 'main_page' %}">
+                        <span>
+                            NutriVista
+                        </span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+                          <ul class="navbar-nav  ">
+                            <li class="nav-item active">
+                              <a class="nav-link" href="{% url 'main_page' %}">Home</a>
+                            </li>
+                            {% if user.is_superuser %}
+                            <li class="nav-item ">
+                              <a class="nav-link" href="{% url 'lista_usuarios_inactivos' %}"> Administrar Usuarios</a>
+                            </li>
+                            <li class="nav-item ">
+                              <a class="nav-link" href="{% url 'listar_nutrientes' %}"> Administrar Nutrientes</a>
+                            </li>
+                            <li class="nav-item ">
+                              <a class="nav-link" href="{% url 'listar_todos_alimentos' %}"> Administrar Alimentos</a>
+                            </li>
+                              <li class="nav-item ">
+                                  <a class="nav-link" href="{% url 'listar_todos_alimentos' %}"> Analisis Grupos</a>
+                            </li>
+                            {% endif %}
+                            {% if not user.is_superuser %}
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'agregar_alimento' %}"> Agregar Alimento</a>
+                            </li>
+                              <li class="nav-item">
+                              <a class="nav-link" href="{% url 'listar_alimentos' %}"> Listar Alimentos</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'registro_diario' %}"> Registro Diario</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'perfil_nutricional' %}"> Perfil Nutricional</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'analisis_nutricional' %}"> Análisis Nutricional</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'sugerencias_alimentos' %}"> Recomendaciones</a>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'logout' %}"> Logout</a>
+                            </li>
+                          </ul>
+                            <div class="user_option">
+                                <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
+                                    <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+    </header>
+
+    <!-- Sección de contenido principal -->
+    <main>
+        <div class="container">
+            <h1>Análisis de Consumo por Grupo de Edad</h1>
+
+            <!-- Sección de evaluación -->
+            <section>
+                <h2>Evaluación General</h2>
+                <p id="evaluacion"></p>
+            </section>
+
+            <!-- Sección de gráficos -->
+            <section>
+                <h2>Comparación de Consumo</h2>
+                <div>
+                    <canvas id="graficoCalorias"></canvas>
+                    <canvas id="graficoMacronutrientes"></canvas>
+                </div>
+            </section>
+
+            <!-- Sección del gráfico de nutrientes -->
+            <section>
+                <h2>Comparación de Nutrientes</h2>
+                <canvas id="graficoNutrientes"></canvas>
+            </section>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="container-fluid footer_section">
+        <p>&copy; 2023 All Rights Reserved. Design by NutriVista</p>
+    </footer>
+
+    <!-- Scripts JS y gráficos -->
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const datos = {{ datos_graficos|safe }};
+
+            // Evaluación
+            const evaluacion = {{ evaluacion|safe }};
+            document.getElementById('evaluacion').innerText = evaluacion.grupo_mas_riesgo + ' tiene más riesgo debido a ' + evaluacion.razones.join(', ');
+
+            // Gráfico de Calorías
+            const ctxCalorias = document.getElementById('graficoCalorias').getContext('2d');
+            new Chart(ctxCalorias, {
+                type: 'bar',
+                data: {
+                    labels: ['Menores de 30', 'Mayores de 30'],
+                    datasets: [{
+                        label: 'Calorías',
+                        data: [datos.menores_30.calorias, datos.mayores_30.calorias],
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de Macronutrientes
+            const ctxMacronutrientes = document.getElementById('graficoMacronutrientes').getContext('2d');
+            new Chart(ctxMacronutrientes, {
+                type: 'bar',
+                data: {
+                    labels: ['Proteínas', 'Carbohidratos', 'Grasas'],
+                    datasets: [
+                        {
+                            label: 'Menores de 30',
+                            data: [datos.menores_30.proteinas, datos.menores_30.carbohidratos, datos.menores_30.grasas],
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Mayores de 30',
+                            data: [datos.mayores_30.proteinas, datos.mayores_30.carbohidratos, datos.mayores_30.grasas],
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de Nutrientes
+            const ctxNutrientes = document.getElementById('graficoNutrientes').getContext('2d');
+
+            // Suponiendo que los nutrientes estén estructurados como un objeto de objetos, donde cada subobjeto tiene la cantidad por nutriente
+            const nutrientesMenores30 = Object.keys(datos.menores_30.nutrientes).map(key => datos.menores_30.nutrientes[key]);
+            const nutrientesMayores30 = Object.keys(datos.mayores_30.nutrientes).map(key => datos.mayores_30.nutrientes[key]);
+            const etiquetasNutrientes = Object.keys(datos.menores_30.nutrientes); // o Object.keys(datos.mayores_30.nutrientes) si son diferentes
+
+            new Chart(ctxNutrientes, {
+                type: 'radar',
+                data: {
+                    labels: etiquetasNutrientes,
+                    datasets: [
+                        {
+                            label: 'Menores de 30',
+                            data: nutrientesMenores30,
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+                        },
+                        {
+                            label: 'Mayores de 30',
+                            data: nutrientesMayores30,
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
