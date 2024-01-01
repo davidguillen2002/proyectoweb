@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from .utils import calcular_necesidades_nutricionales, analizar_ingesta_nutricional, calcular_bmr, ha_cumplido_limites, esta_por_sobrepasar_limites, MICRONUTRIENTES_ESENCIALES
 from .forms import PerfilNutricionalForm, AlimentoForm, RegistroDiarioForm, NutrienteForm, AlimentoNutrienteForm
 from django.db.models import Count
-from datetime import date
+from datetime import date, datetime
 from django.contrib import messages
 from django.db.models import F
 from django.shortcuts import get_object_or_404
@@ -152,7 +152,11 @@ def eliminar_nutriente_de_alimento(request, alimento_id, relacion_id):
 # Para cada grupo, calcula la suma total de calorías, proteínas, carbohidratos, grasas y nutrientes consumidos
 # y luego calcula el promedio por usuario en cada grupo. No tiene decoradores, por lo que se puede asumir
 # que es una función interna o de utilidad y no una vista accesible directamente por una URL.
-def analisis_consumo():
+def analisis_consumo(fecha_inicio=None, fecha_fin=None):
+    # Convertir fechas de string a objetos datetime si son proporcionadas
+    fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d") if fecha_inicio else None
+    fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d") if fecha_fin else None
+
     perfiles = PerfilNutricional.objects.all()
     resultados = {
         'menores_30': {'calorias': 0, 'proteinas': 0, 'carbohidratos': 0, 'grasas': 0, 'nutrientes': {}},
@@ -161,8 +165,13 @@ def analisis_consumo():
 
     for perfil in perfiles:
         grupo = 'menores_30' if perfil.edad < 30 else 'mayores_30'
-
+        # Filtrar los registros por usuario y fechas si se proporcionan
         registros = RegistroDiario.objects.filter(usuario=perfil.usuario)
+        if fecha_inicio:
+            registros = registros.filter(fecha__gte=fecha_inicio)
+        if fecha_fin:
+            registros = registros.filter(fecha__lte=fecha_fin)
+
         for registro in registros:
             alimento = registro.alimento
             resultados[grupo]['calorias'] += float(alimento.calorias) * float(registro.cantidad)
@@ -232,7 +241,9 @@ evaluacion_final = evaluar_grupos(resultados_analisis)
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def vista_analisis(request):
-    resultados_analisis = analisis_consumo()
+    fecha_inicio = request.GET.get('fecha_inicio') # o como se envíe el parámetro
+    fecha_fin = request.GET.get('fecha_fin') # o como se envíe el parámetro
+    resultados_analisis = analisis_consumo(fecha_inicio, fecha_fin)
     evaluacion_final = evaluar_grupos(resultados_analisis)
 
     # Preparar datos para gráficos

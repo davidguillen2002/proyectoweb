@@ -24,6 +24,32 @@
             background-color: #007bff; /* Color de fondo claro */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra opcional */
     }
+    .date-input {
+    position: relative;
+    }
+
+     .date-input input[type='date'] {
+        padding-right: 2.5rem;
+     }
+
+      .date-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .btn-filter {
+        width: 100%;
+        padding: 0.75rem 1.25rem;
+        font-size: 1.05rem;
+        font-weight: bold;
+      }
 </style>
 <head>
     <!-- Metadatos y título -->
@@ -35,6 +61,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <!-- CDN de Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -113,6 +140,26 @@
     <main>
         <div class="container">
             <h1>Análisis de Consumo por Grupo de Edad</h1>
+
+            <!-- Formulario para seleccionar el rango de fechas
+            <form action="{% url 'analisis-consumo' %}" method="get" class="my-4">
+                <div class="form-row">
+                    <div class="form-group col-md-6 date-input">
+                        <label for="fecha_inicio">Fecha de inicio:</label>
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ request.GET.fecha_inicio }}" required>
+                        <i class="fa fa-calendar date-icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="form-group col-md-6 date-input">
+                        <label for="fecha_fin">Fecha de fin:</label>
+                        <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ request.GET.fecha_fin }}" required>
+                        <i class="fa fa-calendar date-icon" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-filter">Filtrar</button>
+                </div>
+            </form> -->
+
 
             <!-- Sección de evaluación -->
             <section>
