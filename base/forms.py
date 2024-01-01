@@ -31,9 +31,6 @@ class AlimentoForm(forms.ModelForm):
             raise ValidationError("Los carbohidratos no pueden ser negativos.")
         return data
 
-    # Hacer lo mismo para carbohidratos y grasas...
-    # Continúa con esta lógica para otros campos que necesiten validación.
-
 class RegistroDiarioForm(forms.ModelForm):
     class Meta:
         model = RegistroDiario
@@ -51,6 +48,24 @@ class PerfilNutricionalForm(forms.ModelForm):
     class Meta:
         model = PerfilNutricional
         fields = ['edad', 'sexo', 'peso', 'altura', 'nivel_actividad']
+
+    def clean_edad(self):
+        edad = self.cleaned_data.get("edad")
+        if edad < 0 or edad > 150:  # Valida que la edad sea razonable
+            raise ValidationError("Por favor, ingresa una edad válida.")
+        return edad
+
+    def clean_peso(self):
+        peso = self.cleaned_data.get("peso")
+        if peso < 10 or peso > 500:  # Valida que el peso sea razonable
+            raise ValidationError("Por favor, ingresa un peso válido.")
+        return peso
+
+    def clean_altura(self):
+        altura = self.cleaned_data.get("altura")
+        if altura < 0.5 or altura > 3.0:  # Valida que la altura sea razonable
+            raise ValidationError("Por favor, ingresa una altura válida.")
+        return altura
 
 
 class NutrienteForm(forms.ModelForm):

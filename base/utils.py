@@ -69,6 +69,7 @@ def calcular_necesidades_nutricionales(perfil):
         'grasas': round(grasas, 2)
     }
 
+# Proporciona un análisis detallado de la ingesta nutricional de un usuario basado en sus registros diarios y sus necesidades nutricionales predefinidas.
 def analizar_ingesta_nutricional(registros, necesidades):
     total_calorias = 0.0
     total_proteinas = 0.0

@@ -16,6 +16,9 @@ from django.contrib import messages
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 
+
+# Lista los usuarios que no tienen registros asociados (identificados como 'usuarios_sin_registros').
+# Si se envía un POST con el propósito de eliminar un usuario, se presenta primero una página de confirmación y, si se confirma, se elimina el usuario.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def listar_usuarios_inactivos(request):
@@ -35,7 +38,8 @@ def listar_usuarios_inactivos(request):
     return render(request, 'base/listar_usuarios_inactivos.html', {'usuarios_sin_registros': usuarios_sin_registros})
 
 
-
+# Maneja la creación de nuevos nutrientes a través de un formulario (NutrienteForm). Si el método es POST y el formulario es válido,
+# guarda el nutriente y redirige a la lista de nutrientes.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def agregar_nutriente(request):
@@ -48,14 +52,15 @@ def agregar_nutriente(request):
         form = NutrienteForm()
     return render(request, 'base/agregar_nutriente.html', {'form': form})
 
-
+# Recupera y muestra todos los nutrientes existentes.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def listar_nutrientes(request):
     nutrientes = Nutriente.objects.all()
     return render(request, 'base/listar_nutrientes.html', {'nutrientes': nutrientes})
 
-
+# Permite editar un nutriente existente. Utiliza el ID del nutriente para encontrarlo y, si se envía un formulario válido a través de POST,
+# actualiza el nutriente y redirige a la lista de nutrientes.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def editar_nutriente(request, nutriente_id):
@@ -69,7 +74,8 @@ def editar_nutriente(request, nutriente_id):
         form = NutrienteForm(instance=nutriente)
     return render(request, 'base/editar_nutriente.html', {'form': form, 'nutriente': nutriente})
 
-
+# Permite eliminar un nutriente específico, identificado por su ID. Si el método es POST, se elimina el nutriente y se redirige a la lista de nutrientes.
+# Si no es POST, probablemente se muestre una página de confirmación para la eliminación.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def eliminar_nutriente(request, nutriente_id):
@@ -79,21 +85,23 @@ def eliminar_nutriente(request, nutriente_id):
         return redirect('listar_nutrientes')
     return render(request, 'base/eliminar_nutriente.html', {'nutriente': nutriente})
 
-
+# Recupera y muestra todos los alimentos disponibles. No se realizan acciones adicionales como creación o eliminación en esta vista,
+# simplemente se lista lo que hay en la base de datos.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def listar_todos_alimentos(request):
     alimentos = Alimento.objects.all()
     return render(request, 'base/listar_todos_alimentos.html', {'alimentos': alimentos})
 
-
+# Permite agregar una relación entre un alimento y un nutriente, probablemente para indicar qué nutrientes contiene un alimento.
+# Si el método es POST y el formulario es válido, se crea la relación y se redirige a la lista de alimentos.
+# Si no es POST, se muestra el formulario para crear la relación.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def agregar_nutriente_a_alimento(request, alimento_id):
     alimento = get_object_or_404(Alimento, id=alimento_id)
 
     if request.method == "POST":
-        # Assuming a form class named AlimentoNutrienteForm which handles the addition of nutrients to foods.
         form = AlimentoNutrienteForm(request.POST)
         if form.is_valid():
             nutriente_rel = form.save(commit=False)
@@ -105,12 +113,14 @@ def agregar_nutriente_a_alimento(request, alimento_id):
         form = AlimentoNutrienteForm()
     return render(request, 'base/agregar_nutriente_a_alimento.html', {'form': form, 'alimento': alimento})
 
-
+# Permite editar una relación existente entre un alimento y un nutriente. Utiliza el ID de ambos para identificar la relación específica.
+# Si se envía un formulario válido mediante POST, se actualiza la relación y se redirige a la lista de alimentos
+# De lo contrario, se muestra el formulario para editar la relación.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def editar_nutriente_de_alimento(request, alimento_id, relacion_id):
     alimento = get_object_or_404(Alimento, id=alimento_id)
-    relacion = get_object_or_404(AlimentoNutriente, id=relacion_id) # Asume que tienes un modelo llamado AlimentoNutriente
+    relacion = get_object_or_404(AlimentoNutriente, id=relacion_id)
 
     if request.method == "POST":
         form = AlimentoNutrienteForm(request.POST, instance=relacion)
@@ -122,13 +132,15 @@ def editar_nutriente_de_alimento(request, alimento_id, relacion_id):
         form = AlimentoNutrienteForm(instance=relacion)
     return render(request, 'base/editar_nutriente_de_alimento.html', {'form': form, 'alimento': alimento})
 
-
+# Permite eliminar una relación específica entre un alimento y un nutriente, identificados por sus respectivos IDs.
+# Si el método es POST, se elimina la relación y se redirige a la lista de alimentos. De lo contrario,
+# probablemente se muestre una página de confirmación para la eliminación.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def eliminar_nutriente_de_alimento(request, alimento_id, relacion_id):
     alimento = get_object_or_404(Alimento, id=alimento_id)
     relacion = get_object_or_404(AlimentoNutriente,
-                                 id=relacion_id)  # Nuevamente, asume que tienes un modelo llamado AlimentoNutriente
+                                 id=relacion_id)
 
     if request.method == "POST":
         relacion.delete()
@@ -136,7 +148,10 @@ def eliminar_nutriente_de_alimento(request, alimento_id, relacion_id):
 
     return render(request, 'base/eliminar_nutriente_de_alimento.html', {'alimento': alimento, 'relacion': relacion})
 
-
+# Analiza el consumo nutricional de todos los perfiles, agrupándolos en menores de 30 años y mayores o iguales a 30 años.
+# Para cada grupo, calcula la suma total de calorías, proteínas, carbohidratos, grasas y nutrientes consumidos
+# y luego calcula el promedio por usuario en cada grupo. No tiene decoradores, por lo que se puede asumir
+# que es una función interna o de utilidad y no una vista accesible directamente por una URL.
 def analisis_consumo():
     perfiles = PerfilNutricional.objects.all()
     resultados = {
@@ -172,7 +187,10 @@ def analisis_consumo():
 
     return resultados
 
-
+# Evalúa cuál grupo tiene un mayor riesgo basado en su consumo nutricional. Utiliza los resultados del análisis de consumo
+# para comparar el consumo calórico y de macronutrientes entre los dos grupos, así como la diversidad de nutrientes consumidos.
+# Proporciona como resultado un grupo con mayor riesgo y las razones de esta evaluación. Al igual que analisis_consumo,
+# parece ser una función de utilidad y no una vista directamente accesible a través de una URL.
 def evaluar_grupos(resultados):
     evaluacion = {
         'grupo_mas_riesgo': '',
@@ -208,7 +226,9 @@ def evaluar_grupos(resultados):
 resultados_analisis = analisis_consumo()
 evaluacion_final = evaluar_grupos(resultados_analisis)
 
-
+# Realiza un análisis de consumo utilizando la función analisis_consumo, evalúa los grupos con evaluar_grupos,
+# y prepara los datos para ser visualizados en gráficos. Finalmente, envía esos datos a un template HTML
+# para su visualización. Es una vista de alto nivel que integra la lógica de análisis con la presentación de datos.
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def vista_analisis(request):
@@ -240,20 +260,26 @@ def vista_analisis(request):
 
     return render(request, 'analisis-consumo.html', context)
 
+# Personaliza la vista de login de Django definiendo un template específico, manejo de campos y redirección
+# tras un login exitoso. redirect_authenticated_user asegura que usuarios ya autenticados sean
+# redirigidos a una página principal.
 class Logueo(LoginView):
     template_name = "base/login.html"
     field = '__all__'
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy('main_page')  # Cambiado de 'tareas' a 'cotizar'
+        return reverse_lazy('main_page')
 
-
+# Personaliza la página de registro de usuarios utilizando UserCreationForm. Maneja la creación de nuevos usuarios,
+# autenticándolos inmediatamente tras un registro exitoso y redirigiéndolos a una página principal.
+# También verifica si el usuario ya está autenticado para redirigirlo directamente a la página
+# principal sin necesidad de registrarse.
 class PaginaRegistro(FormView):
     template_name = 'base/registro.html'
     form_class = UserCreationForm
     redirect_authtenticated_user = True
-    success_url = reverse_lazy('main_page')  # Cambiado de 'tareas' a 'cotizar'
+    success_url = reverse_lazy('main_page')
 
     def form_valid(self, form):
         usuario = form.save()
@@ -263,14 +289,18 @@ class PaginaRegistro(FormView):
 
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect('main_page')  # Cambiado de 'tareas' a 'cotizar'
+            return redirect('main_page')
         return super(PaginaRegistro, self).get(*args, **kwargs)
 
+# Muestra la página principal de la aplicación (index.html). Es una vista simple que no realiza
+# ninguna operación más allá de renderizar la página.
 @login_required
 def main_page(request):
     return render(request, 'index.html')
 
-
+# Maneja la adición de un nuevo alimento. Si el método es POST y el formulario es válido, crea un nuevo objeto Alimento,
+# asigna el usuario actual a este y luego lo guarda en la base de datos. Si el método no es POST,
+# muestra un formulario vacío para agregar un nuevo alimento.
 @login_required
 def agregar_alimento(request):
     if request.method == "POST":
@@ -284,13 +314,15 @@ def agregar_alimento(request):
         form = AlimentoForm()
     return render(request, 'base/agregar_alimento.html', {'form': form})
 
-
+# Recupera y muestra todos los alimentos asociados con el usuario actual. Filtra los alimentos en la base de datos
+# para mostrar solo aquellos que pertenecen al usuario que ha iniciado sesión.
 @login_required
 def listar_alimentos(request):
     alimentos = Alimento.objects.filter(usuario=request.user)
     return render(request, 'base/listar_alimentos.html', {'alimentos': alimentos})
 
-
+# Permite editar un alimento existente. Si el método es POST y el formulario es válido, actualiza el alimento en la base de datos
+# con la nueva información. Si no es POST, muestra el formulario precargado con la información del alimento a editar.
 @login_required
 def editar_alimento(request, alimento_id):
     alimento = get_object_or_404(Alimento, id=alimento_id)
@@ -303,7 +335,8 @@ def editar_alimento(request, alimento_id):
         form = AlimentoForm(instance=alimento)
     return render(request, 'base/editar_alimento.html', {'form': form, 'alimento': alimento})
 
-
+# Permite eliminar un alimento específico, identificado por su ID. Si el método es POST, elimina el alimento y redirige
+# a la lista de alimentos. De lo contrario, probablemente se muestre una página de confirmación para la eliminación.
 @login_required
 def eliminar_alimento(request, alimento_id):
     alimento = get_object_or_404(Alimento, id=alimento_id)
@@ -312,7 +345,9 @@ def eliminar_alimento(request, alimento_id):
         return redirect('listar_alimentos')
     return render(request, 'base/eliminar_alimento.html', {'alimento': alimento})
 
-
+# Permite al usuario registrar su ingesta diaria de alimentos. Al recibir un POST, valida y guarda los datos del formulario.
+# Antes de guardar, verifica que el alimento a registrar no haga que el usuario sobrepase sus límites nutricionales diarios.
+# Si el usuario ya ha cumplido o está por sobrepasar sus límites, muestra una advertencia o una felicitación, respectivamente.
 @login_required
 def registro_diario(request):
     if request.method == "POST":
@@ -348,7 +383,8 @@ def registro_diario(request):
     return render(request, 'base/registro_diario.html', {'form': form})
 
 
-
+# Permite al usuario crear o editar su perfil nutricional. Utiliza get_or_create para evitar la creación de múltiples perfiles
+# para un mismo usuario. Si el método es POST y el formulario es válido, guarda la información del perfil y redirige a la página principal.
 @login_required
 def perfil_nutricional(request):
     perfil, created = PerfilNutricional.objects.get_or_create(
@@ -364,7 +400,9 @@ def perfil_nutricional(request):
         form = PerfilNutricionalForm(instance=perfil)
     return render(request, 'base/perfil_nutricional.html', {'form': form})
 
-
+# Realiza y muestra un análisis nutricional del usuario basado en su perfil nutricional y registros diarios.
+# Calcula las necesidades nutricionales del usuario y compara su ingesta diaria con estas necesidades.
+# Si el usuario ha cumplido sus límites nutricionales para el día, muestra un mensaje de felicitación.
 @login_required
 def analisis_nutricional(request):
     perfil = get_object_or_404(PerfilNutricional, usuario=request.user)
@@ -377,7 +415,7 @@ def analisis_nutricional(request):
 
     return render(request, 'base/analisis_nutricional.html', {'analisis': analisis})
 
-
+# Proporciona sugerencias nutricionales personalizadas a usuarios autenticados basándose en su perfil e ingesta diaria.
 @login_required
 def sugerencias_alimentos(request):
     # Obtener el perfil nutricional del usuario
@@ -389,7 +427,7 @@ def sugerencias_alimentos(request):
     necesidades = calcular_necesidades_nutricionales(perfil)
     analisis = analizar_ingesta_nutricional(registros, necesidades)
 
-    # Obtener top 6 de alimentos ricos en micronutrientes y macronutrientes
+    # Obtener top 5 de alimentos ricos en micronutrientes y macronutrientes
     sugerencias_macro_micro = Alimento.objects.filter(usuario=request.user).annotate(total_macro=F('proteinas') + F('carbohidratos') + F('grasas') + F('nutrientes')).order_by('-total_macro')[:5]
 
     Alimento.objects.filter(usuario=request.user)
