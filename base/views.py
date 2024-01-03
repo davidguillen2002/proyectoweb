@@ -150,8 +150,7 @@ def eliminar_nutriente_de_alimento(request, alimento_id, relacion_id):
 
 # Analiza el consumo nutricional de todos los perfiles, agrupándolos en menores de 30 años y mayores o iguales a 30 años.
 # Para cada grupo, calcula la suma total de calorías, proteínas, carbohidratos, grasas y nutrientes consumidos
-# y luego calcula el promedio por usuario en cada grupo. No tiene decoradores, por lo que se puede asumir
-# que es una función interna o de utilidad y no una vista accesible directamente por una URL.
+# y luego calcula el promedio por usuario en cada grupo.
 def analisis_consumo(fecha_inicio=None, fecha_fin=None):
     # Convertir fechas de string a objetos datetime si son proporcionadas
     fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d") if fecha_inicio else None
@@ -198,8 +197,7 @@ def analisis_consumo(fecha_inicio=None, fecha_fin=None):
 
 # Evalúa cuál grupo tiene un mayor riesgo basado en su consumo nutricional. Utiliza los resultados del análisis de consumo
 # para comparar el consumo calórico y de macronutrientes entre los dos grupos, así como la diversidad de nutrientes consumidos.
-# Proporciona como resultado un grupo con mayor riesgo y las razones de esta evaluación. Al igual que analisis_consumo,
-# parece ser una función de utilidad y no una vista directamente accesible a través de una URL.
+# Proporciona como resultado un grupo con mayor riesgo y las razones de esta evaluación.
 def evaluar_grupos(resultados):
     evaluacion = {
         'grupo_mas_riesgo': '',
