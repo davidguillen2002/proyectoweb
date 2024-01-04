@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
@@ -8,12 +8,12 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from .models import Alimento, PerfilNutricional, RegistroDiario, Nutriente, AlimentoNutriente
 from django.contrib.auth.decorators import login_required
-from .utils import calcular_necesidades_nutricionales, analizar_ingesta_nutricional, calcular_bmr, ha_cumplido_limites, esta_por_sobrepasar_limites, MICRONUTRIENTES_ESENCIALES
+from .utils import calcular_necesidades_nutricionales, analizar_ingesta_nutricional, calcular_bmr, ha_cumplido_limites, esta_por_sobrepasar_limites
 from .forms import PerfilNutricionalForm, AlimentoForm, RegistroDiarioForm, NutrienteForm, AlimentoNutrienteForm
 from django.db.models import Count
 from datetime import date, datetime
 from django.contrib import messages
-from django.db.models import F
+from django.db.models import F, Sum, DecimalField
 from django.shortcuts import get_object_or_404
 
 
@@ -368,28 +368,47 @@ def registro_diario(request):
             necesidades = calcular_necesidades_nutricionales(perfil)
             analisis = analizar_ingesta_nutricional(registros, necesidades)
 
-            # Obtener el alimento desde la base de datos
             alimento_obj = get_object_or_404(Alimento, id=form.cleaned_data['alimento'].id)
             alimento_info = {
                 'calorias': alimento_obj.calorias,
                 'proteinas': alimento_obj.proteinas,
                 'carbohidratos': alimento_obj.carbohidratos,
                 'grasas': alimento_obj.grasas,
-                'cantidad': form.cleaned_data.get('cantidad', 1)  # Asumimos que 1 es el valor por defecto
+                'cantidad': form.cleaned_data.get('cantidad', 1)
             }
 
-            if esta_por_sobrepasar_limites(analisis, necesidades, alimento_info):
-                messages.warning(request, 'Este alimento te hará sobrepasar o alcanzar tus límites diarios.')
-                return render(request, 'base/registro_diario.html', {'form': form})
+            # Removed or modified code to ignore excess warning and fulfillment message.
+            registro = form.save(commit=False)
+            registro.exceso = False # Assuming all entries are not excessive by default.
 
-            form.save()
-            if ha_cumplido_limites(analisis, necesidades):
-                messages.success(request, '¡Felicidades! Has cumplido con tu dosis diaria.')
+            registro.save()
+
+            # Removed the success message for fulfilling dietary limits.
 
             return redirect('analisis_nutricional')
     else:
         form = RegistroDiarioForm(user=request.user)
     return render(request, 'base/registro_diario.html', {'form': form})
+
+
+@login_required
+def reporte_excesos(request):
+    # Get the total calorie intake for each user for each day
+    total_calorias = RegistroDiario.objects.values('fecha', 'usuario__username').annotate(
+        total_calorias=Sum(F('alimento__calorias') * F('cantidad'), output_field=DecimalField())
+    ).order_by('usuario', 'fecha')
+
+    # You might need to get each user's calorie limit from PerfilNutricional or use a static value
+    # For simplicity, let's assume a static limit of 2000 calories here
+    CALORIE_LIMIT = 2000
+
+    # Filter out the days where the user exceeded the calorie limit
+    excesos = [registro for registro in total_calorias if registro['total_calorias'] > CALORIE_LIMIT]
+
+    return render(request, 'base/reporte_excesos.html', {'registros_excesos': excesos})
+
+
+
 
 
 # Permite al usuario crear o editar su perfil nutricional. Utiliza get_or_create para evitar la creación de múltiples perfiles

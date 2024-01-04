@@ -1,0 +1,26 @@
+{% block content %}
+<h2>Reporte de Excesos Nutricionales</h2>
+{% if registros_excesos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Total Calorías</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros_excesos %}
+            <tr>
+                <td>{{ registro.fecha }}</td>
+                <td>{{ registro.usuario__username }}</td>
+                <td>{{ registro.total_calorias }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No se han registrado excesos de calorías. ¡Buen trabajo!</p>
+{% endif %}
+{% endblock %}
+

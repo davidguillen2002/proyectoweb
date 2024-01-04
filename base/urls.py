@@ -23,7 +23,8 @@ from .views import (
     eliminar_nutriente,
     editar_nutriente_de_alimento,
     eliminar_nutriente_de_alimento,
-    vista_analisis
+    vista_analisis,
+    reporte_excesos
 )
 
 urlpatterns = [
@@ -35,6 +36,7 @@ urlpatterns = [
     path('registro_diario/', registro_diario, name='registro_diario'),
     path('perfil_nutricional/', perfil_nutricional, name='perfil_nutricional'),
     path('analisis_nutricional/', analisis_nutricional, name='analisis_nutricional'),
+    path('reporte_excesos/', reporte_excesos, name='reporte_excesos'),
     path('listar_alimentos/', listar_alimentos, name='listar_alimentos'),
     path('editar_alimento/<int:alimento_id>/', editar_alimento, name='editar_alimento'),
     path('eliminar_alimento/<int:alimento_id>/', eliminar_alimento, name='eliminar_alimento'),
