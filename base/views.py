@@ -6,6 +6,8 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+
+from .alimento_repository import AlimentoRepository
 from .models import Alimento, PerfilNutricional, RegistroDiario, Nutriente, AlimentoNutriente
 from django.contrib.auth.decorators import login_required
 from .utils import calcular_necesidades_nutricionales, analizar_ingesta_nutricional, calcular_bmr, ha_cumplido_limites, esta_por_sobrepasar_limites
@@ -15,7 +17,18 @@ from datetime import date, datetime
 from django.contrib import messages
 from django.db.models import F, Sum, DecimalField
 from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+from .serializers import AlimentoSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from .alimento_service import AlimentoService
 
+class AlimentoViewSet(viewsets.ModelViewSet):
+    queryset = Alimento.objects.all()
+    serializer_class = AlimentoSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['nombre', 'calorias', 'proteinas', 'carbohidratos', 'grasas']
+    search_fields = ['nombre']
 
 # Lista los usuarios que no tienen registros asociados (identificados como 'usuarios_sin_registros').
 # Si se envía un POST con el propósito de eliminar un usuario, se presenta primero una página de confirmación y, si se confirma, se elimina el usuario.
@@ -310,14 +323,16 @@ def main_page(request):
 # Maneja la adición de un nuevo alimento. Si el método es POST y el formulario es válido, crea un nuevo objeto Alimento,
 # asigna el usuario actual a este y luego lo guarda en la base de datos. Si el método no es POST,
 # muestra un formulario vacío para agregar un nuevo alimento.
+# USO DE PATRON DE DISEÑO REPOSITORY
 @login_required
 def agregar_alimento(request):
+    repository = AlimentoRepository()
     if request.method == "POST":
         form = AlimentoForm(request.POST, request.FILES)
         if form.is_valid():
-            alimento = form.save(commit=False)  # Guarda el alimento pero no lo comitees aún a la base de datos.
-            alimento.usuario = request.user  # Asigna el usuario actual al alimento.
-            alimento.save()  # Ahora guarda el alimento en la base de datos con el usuario asociado.
+            alimento = form.save(commit=False)
+            alimento.usuario = request.user
+            repository.add(alimento)
             return redirect('listar_alimentos')
     else:
         form = AlimentoForm()
@@ -325,9 +340,11 @@ def agregar_alimento(request):
 
 # Recupera y muestra todos los alimentos asociados con el usuario actual. Filtra los alimentos en la base de datos
 # para mostrar solo aquellos que pertenecen al usuario que ha iniciado sesión.
+# USO DE PATRON DE DISEÑO SERVICE
 @login_required
 def listar_alimentos(request):
-    alimentos = Alimento.objects.filter(usuario=request.user)
+    service = AlimentoService()
+    alimentos = service.listar_todos_alimentos()
     return render(request, 'base/listar_alimentos.html', {'alimentos': alimentos})
 
 # Permite editar un alimento existente. Si el método es POST y el formulario es válido, actualiza el alimento en la base de datos

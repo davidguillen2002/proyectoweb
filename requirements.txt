@@ -4,3 +4,7 @@ sqlparse
 tzdata
 gunicorn
 Pillow
+requests
+djangorestframework
+django-cors-headers
+django-filter

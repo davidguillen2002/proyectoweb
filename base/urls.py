@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
+from rest_framework.routers import DefaultRouter
 from django.conf.urls.static import static
 from .views import (
     Logueo,
@@ -24,11 +25,16 @@ from .views import (
     editar_nutriente_de_alimento,
     eliminar_nutriente_de_alimento,
     vista_analisis,
-    reporte_excesos
+    reporte_excesos,
+    AlimentoViewSet
 )
+
+router = DefaultRouter()
+router.register(r'alimentos', AlimentoViewSet)
 
 urlpatterns = [
     path('', Logueo.as_view(), name='login'),
+    path('api/', include(router.urls)),
     path('registro/', PaginaRegistro.as_view(), name='registro'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('main_page/', main_page, name='main_page'),
